@@ -1,0 +1,58 @@
+import type { Product } from "../types/types";
+
+export const Products: Product[] = [
+  {
+    id: 1,
+    name: "Rosas",
+    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0IXOwqyCQq7S5BzPSwS--TD8KoesOwZCiy3BlHHxinUMq7BPu74-IcN60&s=10",
+    stock: 20,
+    precio: 25000,
+    descripcion: "Hermoso ramo de Rosas",
+    categoria: "Ramos",
+  },
+  {
+    id: 2,
+    name: "Girasoles",
+    img: "https://floresydetalles.cl/wp-content/uploads/2023/09/ramos-de-flores-con-girasoles-removebg-preview.png",
+    stock: 15,
+    precio: 20000,
+    descripcion: "Hermoso ramo de Girasoles",
+    categoria: "Ramos",
+  },
+  {
+    id: 3,
+    name: "Tulipanes",
+    img: "https://www.wineflowers.com/images/tulipanigialli_grande.jpg",
+    stock: 30,
+    precio: 80000,
+    descripcion: "Hermoso ramo de Tulipanes",
+    categoria: "Flores de temporada",
+  },
+  {
+    id: 4,
+    name: "Orquídias",
+    img: "https://www.exoticasflores.cl/wp-content/uploads/2019/08/ramo-novia-orquideas-2.jpg.webp",
+    stock: 2,
+    precio: 100000,
+    descripcion: "Hermoso ramo de Orquídias.",
+    categoria: "Flores exóticas",
+  },
+  {
+    id: 5,
+    name: "Margarita",
+    img: "https://www.exoticasflores.cl/wp-content/uploads/2022/07/Flores-condolencia-2203-1.jpg.webp",
+    stock: 50,
+    precio: 10000,
+    descripcion: "Hermoso ramo de Margaritas",
+    categoria: "Flores de temporada",
+  },
+  {
+    id: 6,
+    name: "Lirios",
+    img: "https://floresparis.cl/wp-content/uploads/2021/07/LILIRO.png",
+    stock: 18,
+    precio: 35000,
+    descripcion: "Hermoso ramo de Lirios",
+    categoria: "Flores exóticas",
+  },
+];
