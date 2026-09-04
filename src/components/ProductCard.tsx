@@ -1,22 +1,27 @@
 import type { Product } from "../types/types"
+import type { CartAction } from "../reducers/cartReducer";
 
 type ProductCardProps = {
-  product : Product
+  product : Product; 
+  dispatch:React.Dispatch<CartAction>
 }
-const ProductCard = ({product}:ProductCardProps) => {
+const ProductCard = ({product,dispatch}:ProductCardProps) => {
+ 
   return (
     <div className="card bg-base-content w-96 shadow-sm ">
-  <figure className="h-96 w-full">
+  <figure className=" content">
     <img
       src={product.img}
-      alt="Shoes"/>
+      alt="Shoes"
+      className="h-96 w-full object-cover"/>
   </figure>
   <div className="card-body bg-brown-pc rounded-b-[5px]">
     <h2 className="card-title font-bold text-2xl uppercase">{product.name}</h2>
     <p>{product.descripcion}</p>
     <p>{product.precio}</p>
     <div className="card-actions justify-end">
-      <button className="btn bg-amber-950 border-none">Comprar</button>
+      <button onClick={() => dispatch({type:"ADD-PRODUCT",payload:{product}})} className="btn bg-amber-950
+      hover:bg-amber-950/60 duration-300 border-none">Agregar al carro</button>
     </div>
   </div>
 </div>

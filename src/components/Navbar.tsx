@@ -23,7 +23,7 @@ const Navbar = () => {
               <Link to={"/cart"}>Carrito</Link>
             </li>
             <li className="hover:border-b-4">
-              <a href="./About">Sobre nosotros</a>
+             <Link to={"/about"}>Sobre Nosotros</Link>
             </li>
           </ul>
         </nav>
