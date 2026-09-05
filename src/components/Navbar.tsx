@@ -19,6 +19,11 @@ const Navbar = () => {
             <li className="hover:border-b-4">
               <a href="./Login">Login</a>
             </li>
+             <li className="hover:border-b-4">
+              <Link to={"/registro"}>
+                Registrarse
+              </Link>
+            </li>
             <li className="hover:border-b-4">
               <Link to={"/cart"}>Carrito</Link>
             </li>

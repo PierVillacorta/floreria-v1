@@ -8,12 +8,14 @@ import Cart from "./page/Cart.tsx";
 import NotFoundPage from "./components/NotFoundPage.tsx";
 import About from "./page/About.tsx";
 import Login from "./page/Login.tsx";
+import Registro from "./components/Registro.tsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/cart", element: <Cart /> },
   { path: "/about", element: <About /> },
   { path: "/login", element: <Login /> },
+  { path: "/registro", element: <Registro /> },
   { path: "*", element: <NotFoundPage /> },
 ]);
 

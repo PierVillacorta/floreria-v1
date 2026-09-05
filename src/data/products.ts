@@ -51,7 +51,7 @@ export const Products: Product[] = [
     name: "Lirios",
     img: "https://floresparis.cl/wp-content/uploads/2021/07/LILIRO.png",
     stock: 18,
-    precio: 35000,
+    precio:35000,
     descripcion: "Hermoso ramo de Lirios",
     categoria: "Flores exóticas",
   },

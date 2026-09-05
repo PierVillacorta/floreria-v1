@@ -18,7 +18,7 @@ const ProductCard = ({product,dispatch}:ProductCardProps) => {
   <div className="card-body bg-brown-pc rounded-b-[5px]">
     <h2 className="card-title font-bold text-2xl uppercase">{product.name}</h2>
     <p>{product.descripcion}</p>
-    <p>{product.precio}</p>
+    <p>${product.precio.toLocaleString("es-CL")}</p>   
     <div className="card-actions justify-end">
       <button onClick={() => dispatch({type:"ADD-PRODUCT",payload:{product}})} className="btn bg-amber-950
       hover:bg-amber-950/60 duration-300 border-none">Agregar al carro</button>

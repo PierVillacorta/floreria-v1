@@ -1,0 +1,90 @@
+.registro-container {
+  width: 400px;
+  margin: 50px auto;
+  padding: 35px;
+  background-color: #fff0f5 !important;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.registro-container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #9c4560 !important;
+  font-size: 28px;
+}
+
+.campo {
+  margin-bottom: 20px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: bold;
+  color: #6b3d4b !important;
+}
+
+.campo input {
+  width: 100%;
+  padding: 11px;
+  box-sizing: border-box;
+  border: 2px solid #d88fa5 !important;
+  border-radius: 7px;
+  background-color: white !important;
+  color: #333 !important;
+}
+
+.campo input:focus {
+  outline: none;
+  border: 2px solid #b85c78 !important;
+}
+
+.campo input::placeholder {
+  color: #999 !important;
+}
+
+.registro-container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 7px;
+  background-color: #c76b87 !important;
+  color: white !important;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.registro-container button:hover {
+  background-color: #a94f6b !important;
+}
+
+.error {
+  margin: 5px 0 0;
+  color: #d32f2f !important;
+  font-size: 14px;
+}
+
+.exito {
+  text-align: center;
+  margin-top: 15px;
+  color: #4f8a5b !important;
+  font-weight: bold;
+}
+.volver-home {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.volver-home a {
+  color: #9c4560;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.volver-home a:hover {
+  text-decoration: underline;
+}
