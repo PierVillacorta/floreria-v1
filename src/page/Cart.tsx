@@ -16,8 +16,10 @@ const Cart = () => {
       {/* Volver */}
       <Link
         to="/"
-        className="absolute right-6 top-5 text-3xl font-bold hover:text-amber-900 transition-colors duration-300">
-          &lt; </Link>
+        className="absolute right-6 top-5 text-3xl font-bold hover:text-amber-900 transition-colors duration-300"
+      >
+        &lt;{" "}
+      </Link>
 
       <div className="mx-auto w-full max-w-4xl">
         {/* Título */}
@@ -35,16 +37,6 @@ const Cart = () => {
           /* Carrito vacío */
           <div className="flex min-h-[50vh] flex-col items-center justify-center">
             <p className="text-2xl font-semibold uppercase">No hay productos</p>
-
-            <Link
-              to="/"
-              className="mt-6 rounded-lg bg-amber-950 px-6 py-3
-                         font-medium text-white
-                         hover:bg-amber-900
-                         transition-colors duration-300"
-            >
-              VER PRODUCTOS
-            </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_300px]">
@@ -114,8 +106,7 @@ const Cart = () => {
             </div>
 
             {/* Resumen */}
-            <aside className="h-fit rounded-2xl bg-amber-50/70 border border-amber-900/10 p-6 shadow-sm mt-11"
->
+            <aside className="h-fit rounded-2xl bg-amber-50/70 border border-amber-900/10 p-6 shadow-sm mt-11">
               <h2 className="text-xl font-bold uppercase">Resumen</h2>
 
               <div className="my-5 h-px bg-brown-pc/10" />
@@ -131,7 +122,8 @@ const Cart = () => {
                 <span className="text-xl font-bold">${total}</span>
               </div>
 
-              <button className="mt-6 w-full rounded-lg bg-amber-950 px-5 py-3 font-semibold text-white
+              <button
+                className="mt-6 w-full rounded-lg bg-amber-950 px-5 py-3 font-semibold text-white
               hover:bg-amber-900 hover:scale-[1.02] active:scale-95 transition-all duration-300 cursor-pointer"
               >
                 PAGAR
