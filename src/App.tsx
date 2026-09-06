@@ -11,10 +11,10 @@ function App() {
         <span className="justify-items-center">
           <span>BIENVENIDO</span>
           <span>A</span>
-          <span>TU</span>
-          <span>SCALE</span>
-          <span>MAINTAIN</span>
-          <span>REPEAT</span>
+          <span>NUESTRA</span>
+          <span>FLORERÍA</span>
+          <span>🌷</span>
+          
         </span>
       </span>
 

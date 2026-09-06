@@ -8,12 +8,12 @@ type ProductCardProps = {
 const ProductCard = ({product,dispatch}:ProductCardProps) => {
  
   return (
-    <div className="card bg-base-content w-96 shadow-sm ">
+    <div className="card bg-base-content w-full max-w-sm shadow-sm ">
   <figure className=" content">
     <img
       src={product.img}
-      alt="Shoes"
-      className="h-96 w-full object-cover"/>
+      alt={product.name}
+      className="h-72 w-full object-cover"/>
   </figure>
   <div className="card-body bg-brown-pc rounded-b-[5px]">
     <h2 className="card-title font-bold text-2xl uppercase">{product.name}</h2>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const Login = () => {
   return (
     <section className="min-h-screen w-full bg-white-semi px-6 flex items-center justify-center">
@@ -83,14 +84,14 @@ const Login = () => {
           {/* Registro */}
           <p className="mt-6 text-center text-sm text-brown-pc/60">
             ¿No tienes una cuenta?{" "}
-            <a
-              href="#"
-              className="font-semibold text-brown-pc
-                         hover:text-amber-900
-                         transition-colors duration-300"
-            >
-              Regístrate
-            </a>
+            <Link
+            to="/Registro"
+            className="font-semibold text-brown-pc
+             hover:text-amber-900
+             transition-colors duration-300"
+  >
+   Regístrate
+</Link>
           </p>
         </form>
       </div>

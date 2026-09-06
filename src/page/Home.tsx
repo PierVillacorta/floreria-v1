@@ -4,7 +4,7 @@ import { useCart } from "../hooks/useCart";
 const Home = () => {
   const  {dispatch} = useCart()
   return (
-    <main className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 mt-24 gap-y-32 justify-items-center">
+    <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-10 mt-24">
       {products.map((product) => (
         <ProductCard product={product} key={product.id} dispatch={dispatch}/>
       ))}
