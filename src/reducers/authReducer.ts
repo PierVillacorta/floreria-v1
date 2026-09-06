@@ -9,7 +9,7 @@ export type AuthAction =
   | { type: "LOGIN"; payload: { user: User } }
   | { type: "LOGOUT" };
 
-export const initialState: AuthState = {
+export const initialStateAuth: AuthState = {
   user: null,
   users: [],
 };

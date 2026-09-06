@@ -7,7 +7,7 @@ type ProductCardProps = {
 };
 const ProductCard = ({ product, dispatch }: ProductCardProps) => {
   return (
-    <div className="card bg-base-content w-96 shadow-sm ">
+    <div className="card  w-96 shadow-sm text-white-semi">
       <figure className=" content">
         <img
           src={product.img}
@@ -26,8 +26,8 @@ const ProductCard = ({ product, dispatch }: ProductCardProps) => {
             onClick={() =>
               dispatch({ type: "ADD-PRODUCT", payload: { product } })
             }
-            className="btn text-white bg-amber-950
-      hover:bg-amber-950/60 transition-colors duration-300 border-none"
+            className="btn btn-neutral bg-amber-950
+      hover:bg-amber-950/60 transition-colors duration-300 border-none text-white-semi"
           >
             Agregar al carro
           </button>

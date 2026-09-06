@@ -14,13 +14,13 @@ const Navbar = () => {
           </Link>
           
         </div>
-        <nav className="-200 m-auto gap text-white-semi font-bold uppercase ">
+        <nav className="-200 m-auto gap  font-bold uppercase ">
           <ul className="flex gap-52">
-            <li className="hover:border-b-4">
-              <a href="./Login">Login</a>
-            </li>
+            <Link to={"/Login"}>
+              Login
+            </Link>
              <li className="hover:border-b-4">
-              <Link to={"/registro"}>
+              <Link to={"/register"}>
                 Registrarse
               </Link>
             </li>

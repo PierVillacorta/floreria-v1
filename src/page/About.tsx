@@ -65,7 +65,7 @@ const About = () => {
             “Hacemos de cada momento un recuerdo especial.”
           </p>
         </div> 
-        <Link className="absolute top-4 right-10 text-2xl font-bold" to={"/"}>&lt;</Link>
+        <Link className="absolute top-6 right-10 text-3xl font-extrabold" to={"/"}>&lt;-</Link>
       </div>
     </section>
   );

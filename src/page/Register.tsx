@@ -1,6 +1,35 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import type { User } from "../types/types";
+import { useAuth } from "../hooks/useAuth";
 
-const Login = () => {
+const Register = () => {
+  const { register } = useAuth();
+  const [feedback, setFeedback] = useState<{
+    success: boolean;
+    message: string;
+  }>();
+  const [name, setName] = useState<User["name"]>("");
+  const [email, setEmail] = useState<User["email"]>("");
+  const [password, setPassword] = useState<User["password"]>("");
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!name.trim() || !email.trim || !password.trim()) {
+      setFeedback({
+        success: false,
+        message: "Todos los campos son obligatorios",
+      });
+      return
+    }
+    const response = register(name, email, password);
+    setFeedback(response);
+
+    if (response.success) {
+      (setName(""), setEmail(""), setPassword(""));
+    }
+  };
+
   return (
     <section className="min-h-screen w-full bg-white-semi px-6 flex items-center justify-center">
       <div className="w-full max-w-md">
@@ -9,15 +38,54 @@ const Login = () => {
             Bienvenido
           </p>
           <h1 className="mt-2 text-4xl font-bold uppercase text-brown-pc">
-            Iniciar sesión
+            REGISTRATE
           </h1>
           <div className="mx-auto mt-4 h-1 w-14 rounded-full bg-amber-950" />
         </div>
 
         <form
-          className="rounded-2xl border border-amber-900/10
-                     bg-white p-8 shadow-sm"
+          className="rounded-2xl border border-amber-900/10 bg-white p-8 shadow-sm"
+          onSubmit={handleSubmit}
         >
+          {/* Banner condicional que lee el "message" que programaste en tu contexto */}
+          {feedback && (
+            <div
+              className={`mb-4 p-3 rounded-lg text-sm text-center font-medium ${
+                feedback.success
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {feedback.message}
+            </div>
+          )}
+          {/* nombre del usuario */}
+          <div className="mb-5">
+            <label
+              htmlFor="text"
+              className="mb-2 block text-sm font-semibold text-brown-pc"
+            >
+              Nombre
+            </label>
+
+            <input
+              id="text"
+              type="text"
+              value={name}
+              placeholder="tu@email.com"
+              className="w-full rounded-lg border border-brown-pc/20
+                         bg-white-semi px-4 py-3
+                         text-brown-pc
+                         outline-none
+                         focus:border-brown-pc/60
+                         focus:ring-2 focus:ring-brown-pc/10
+                         transition-all duration-300"
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+          </div>
+
           {/* Email */}
           <div className="mb-5">
             <label
@@ -30,6 +98,7 @@ const Login = () => {
             <input
               id="email"
               type="email"
+              value={email}
               placeholder="tu@email.com"
               className="w-full rounded-lg border border-brown-pc/20
                          bg-white-semi px-4 py-3
@@ -38,6 +107,7 @@ const Login = () => {
                          focus:border-brown-pc/60
                          focus:ring-2 focus:ring-brown-pc/10
                          transition-all duration-300"
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -54,6 +124,7 @@ const Login = () => {
               id="password"
               type="password"
               placeholder="••••••••"
+              value={password}
               className="w-full rounded-lg border border-brown-pc/20
                          bg-white-semi px-4 py-3
                          text-brown-pc
@@ -61,6 +132,7 @@ const Login = () => {
                          focus:border-brown-pc/60
                          focus:ring-2 focus:ring-brown-pc/10
                          transition-all duration-300"
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
@@ -75,24 +147,24 @@ const Login = () => {
                        active:scale-95
                        transition-all duration-300"
           >
-            INICIAR SESIÓN
+            REGISTRARSE
           </button>
 
           {/* Registro */}
           <p className="mt-6 text-center text-sm text-brown-pc/60">
-            ¿No tienes una cuenta? 
+            ¿tienes una cuenta?
             <Link
-              to={"/register"}
+              to={"/login"}
               className="font-semibold text-brown-pc
                          hover:text-amber-900
                          transition-colors duration-300"
             >
-              Registrate
+              Login
             </Link>
           </p>
         </form>
       </div>
-       <Link
+      <Link
         to="/"
         className="absolute right-10 top-6 text-3xl font-bold hover:text-amber-900 transition-colors duration-300"
       >
@@ -102,4 +174,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

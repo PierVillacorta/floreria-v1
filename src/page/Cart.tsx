@@ -16,9 +16,9 @@ const Cart = () => {
       {/* Volver */}
       <Link
         to="/"
-        className="absolute right-6 top-5 text-3xl font-bold hover:text-amber-900 transition-colors duration-300"
+        className="absolute right-10 top-6 text-3xl font-bold hover:text-amber-900 transition-colors duration-300"
       >
-        &lt;{" "}
+        &lt;-
       </Link>
 
       <div className="mx-auto w-full max-w-4xl">
