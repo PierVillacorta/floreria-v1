@@ -4,19 +4,19 @@ import { useAuth } from "../hooks/useAuth";
 const Navbar = () => {
   const { state, logout } = useAuth();
   return (
-    <header className="h-25 bg-brown-pc flex  items-center">
-      <div className="w-7/8 m-auto flex justify-between">
+    <header className="w-full bg-brown-pc ">
+      <div className="flex flex-col items-center max-w-7/9 md:flex-row md:items-center mx-auto md:justify-between px-4 py-4">
         <div>
           <Link to={"/"}>
             <img
               src={logo}
               alt="logo_floreria"
-              className="w-16 h-16 rounded-xl"
+              className="w-16 h-16 rounded-xl mb-10 md:mb-0"
             />
           </Link>
         </div>
-        <nav className="-200 m-auto gap font-bold uppercase ">
-          <ul className="flex gap-52">
+        <nav className=" m-auto gap font-bold uppercase ">
+          <ul className="flex flex-wrap justify-center items-center md:gap-52 gap-3">
             {state.user ? (
               <>
                 <li className="text-xl font-semibold gap-2 flex">
