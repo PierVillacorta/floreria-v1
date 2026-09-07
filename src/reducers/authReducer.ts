@@ -1,3 +1,4 @@
+import { Users } from "../data/users";
 import type { User } from "../types/types";
 
 export type AuthState = {
@@ -11,7 +12,7 @@ export type AuthAction =
 
 export const initialStateAuth: AuthState = {
   user: null,
-  users: [],
+  users: Users,
 };
 
 export const authReducer = (

@@ -56,6 +56,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     const user = state.users.find(
       (user) => user.email === email && user.password === password,
     );
+    console.log(state.users)
     if (!user) {
       return { success: false, message: "Correo o Contraseña incorrecto" };
     }

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import type { User } from "../types/types";
 import { useAuth } from "../hooks/useAuth";
 
@@ -12,6 +12,7 @@ const Register = () => {
   const [name, setName] = useState<User["name"]>("");
   const [email, setEmail] = useState<User["email"]>("");
   const [password, setPassword] = useState<User["password"]>("");
+  const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,6 +30,13 @@ const Register = () => {
       (setName(""), setEmail(""), setPassword(""));
     }
   };
+  useEffect(() => {
+    if(!feedback){
+      return
+    }
+    alert(feedback?.message)
+    navigate("/login")
+  },[feedback])
 
   return (
     <section className="min-h-screen w-full bg-white-semi px-6 flex items-center justify-center">
@@ -47,18 +55,7 @@ const Register = () => {
           className="rounded-2xl border border-amber-900/10 bg-white p-8 shadow-sm"
           onSubmit={handleSubmit}
         >
-          {/* Banner condicional que lee el "message" que programaste en tu contexto */}
-          {feedback && (
-            <div
-              className={`mb-4 p-3 rounded-lg text-sm text-center font-medium ${
-                feedback.success
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
-              }`}
-            >
-              {feedback.message}
-            </div>
-          )}
+         
           {/* nombre del usuario */}
           <div className="mb-5">
             <label
@@ -72,7 +69,7 @@ const Register = () => {
               id="text"
               type="text"
               value={name}
-              placeholder="tu@email.com"
+              placeholder="Ingresa tu nombre"
               className="w-full rounded-lg border border-brown-pc/20
                          bg-white-semi px-4 py-3
                          text-brown-pc
@@ -165,11 +162,13 @@ const Register = () => {
         </form>
       </div>
       <Link
-        to="/"
-        className="absolute right-10 top-6 text-3xl font-bold hover:text-amber-900 transition-colors duration-300"
-      >
-        &lt;-
-      </Link>
+          to="/"
+          className="absolute top-6 left-10 items-center gap-2 text-sm font-semibold
+          uppercase tracking-wider text-brown-pc/60
+          transition-colors duration-300 hover:text-amber-950"
+        >
+          ← Volver a la tienda
+        </Link>
     </section>
   );
 };
