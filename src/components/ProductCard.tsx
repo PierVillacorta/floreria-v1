@@ -1,5 +1,6 @@
 import type { Product } from "../types/types";
 import type { CartAction } from "../reducers/cartReducer";
+import { Link } from "react-router-dom";
 
 type ProductCardProps = {
   product: Product;
@@ -21,7 +22,10 @@ const ProductCard = ({ product, dispatch }: ProductCardProps) => {
         </h2>
         <p>{product.descripcion}</p>
         <p>${product.precio.toLocaleString("es-CL")}</p>
-        <div className="card-actions justify-end">
+        <div className="card-actions justify-around">
+          <Link className="btn bg-transparent border-none shadow-none" to={`/product/${product.name}`}>
+            Ver producto
+          </Link>
           <button
             onClick={() =>
               dispatch({ type: "ADD-PRODUCT", payload: { product } })

@@ -1,25 +1,40 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../hooks/useCart";
+import { useAuth } from "../hooks/useAuth";
 
 const Cart = () => {
   const { state, dispatch } = useCart();
+  const {state:stateUser,} = useAuth()
+  const navigate = useNavigate()
 
   const isCartEmpty = state.cart.length === 0;
 
   const total = state.cart.reduce(
-    (acc, product) => acc + product.precio * product.amount,
-    0,
+    (acc, product) => acc + product.precio * product.amount,0
   );
+  const handlePay = () => {
 
+    if(!stateUser.user){
+      alert("Necesitas estar registrado o logeado para comprar")
+      navigate("/login")
+      return
+    }
+    dispatch({
+      type:"CLEAR-PRODUCT"
+    })
+    alert("Gracias por tu compra")
+  }
   return (
     <section className="min-h-screen w-full bg-white-semi px-6 py-10 text-brown-pc">
       {/* Volver */}
       <Link
-        to="/"
-        className="absolute right-10 top-6 text-3xl font-bold hover:text-amber-900 transition-colors duration-300"
-      >
-        &lt;-
-      </Link>
+          to="/"
+          className="absolute top-6 left-10 items-center gap-2 text-sm font-semibold
+          uppercase tracking-wider text-brown-pc/60
+          transition-colors duration-300 hover:text-amber-950"
+        >
+          ← Volver a la tienda
+        </Link>
 
       <div className="mx-auto w-full max-w-4xl">
         {/* Título */}
@@ -70,7 +85,7 @@ const Cart = () => {
                       </h3>
 
                       <p className="mt-1 text-sm text-white/70">
-                        Precio: ${product.precio}
+                        Precio: ${product.precio.toLocaleString("es-CL")}
                       </p>
 
                       <p className="text-sm text-white/70">
@@ -78,7 +93,7 @@ const Cart = () => {
                       </p>
 
                       <p className="mt-1 font-semibold">
-                        Total: ${product.precio * product.amount}
+                        Total: ${(product.precio * product.amount).toLocaleString("es-CL")}
                       </p>
                     </div>
 
@@ -119,12 +134,13 @@ const Cart = () => {
               <div className="mt-3 flex justify-between">
                 <span className="font-semibold">Total</span>
 
-                <span className="text-xl font-bold">${total}</span>
+                <span className="text-xl font-bold">${total.toLocaleString("es-CL")}</span>
               </div>
 
               <button
                 className="mt-6 w-full rounded-lg bg-amber-950 px-5 py-3 font-semibold text-white
               hover:bg-amber-900 hover:scale-[1.02] active:scale-95 transition-all duration-300 cursor-pointer"
+              onClick={handlePay}
               >
                 PAGAR
               </button>

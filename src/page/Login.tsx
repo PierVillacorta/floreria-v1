@@ -1,6 +1,47 @@
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import type { User } from "../types/types";
 
 const Login = () => {
+  const { login } = useAuth();
+  const [feedback, setFeedback] = useState<{
+    success: boolean;
+    message: string;
+  }>();
+  const [email, setEmail] = useState<User["email"]>("");
+  const [password, setPassword] = useState<User["password"]>("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      setFeedback({
+        success: false,
+        message: "Todos los campos son obligatorios",
+      });
+      return;
+    }
+    const response = login(email, password);
+    setFeedback(response);
+
+    if (response.success) {
+      (setEmail(""), setPassword(""));
+    }
+  };
+  useEffect(() => {
+    if (!feedback) {
+      return;
+    }
+    if (feedback.success) {
+      alert(feedback?.message);
+      navigate("/");
+    } else {
+      alert(feedback?.message);
+      (setEmail(""), setPassword(""));
+    }
+  }, [feedback]);
+
   return (
     <section className="min-h-screen w-full bg-white-semi px-6 flex items-center justify-center">
       <div className="w-full max-w-md">
@@ -15,6 +56,7 @@ const Login = () => {
         </div>
 
         <form
+          onSubmit={handleSubmit}
           className="rounded-2xl border border-amber-900/10
                      bg-white p-8 shadow-sm"
         >
@@ -31,6 +73,7 @@ const Login = () => {
               id="email"
               type="email"
               placeholder="tu@email.com"
+              value={email}
               className="w-full rounded-lg border border-brown-pc/20
                          bg-white-semi px-4 py-3
                          text-brown-pc
@@ -38,6 +81,7 @@ const Login = () => {
                          focus:border-brown-pc/60
                          focus:ring-2 focus:ring-brown-pc/10
                          transition-all duration-300"
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -53,6 +97,7 @@ const Login = () => {
             <input
               id="password"
               type="password"
+              value={password}
               placeholder="••••••••"
               className="w-full rounded-lg border border-brown-pc/20
                          bg-white-semi px-4 py-3
@@ -61,6 +106,7 @@ const Login = () => {
                          focus:border-brown-pc/60
                          focus:ring-2 focus:ring-brown-pc/10
                          transition-all duration-300"
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
@@ -73,14 +119,15 @@ const Login = () => {
                        hover:bg-amber-900
                        hover:scale-[1.01]
                        active:scale-95
-                       transition-all duration-300"
+                       transition-all duration-300
+                       cursor-pointer"
           >
             INICIAR SESIÓN
           </button>
 
           {/* Registro */}
           <p className="mt-6 text-center text-sm text-brown-pc/60">
-            ¿No tienes una cuenta? 
+            ¿No tienes una cuenta?
             <Link
               to={"/register"}
               className="font-semibold text-brown-pc
@@ -92,11 +139,13 @@ const Login = () => {
           </p>
         </form>
       </div>
-       <Link
+      <Link
         to="/"
-        className="absolute right-10 top-6 text-3xl font-bold hover:text-amber-900 transition-colors duration-300"
+        className="absolute top-6 left-10 items-center gap-2 text-sm font-semibold
+          uppercase tracking-wider text-brown-pc/60
+          transition-colors duration-300 hover:text-amber-950"
       >
-        &lt;-
+        ← Volver a la tienda
       </Link>
     </section>
   );

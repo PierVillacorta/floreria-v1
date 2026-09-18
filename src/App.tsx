@@ -12,7 +12,6 @@ function App() {
           <span>NUESTRA</span>
           <span>FLORERÍA</span>
           <span>🌷</span>
-          
         </span>
       </span>
       <Home />
