@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
 const Login = () => {
   return (
     <section className="min-h-screen w-full bg-white-semi px-6 flex items-center justify-center">

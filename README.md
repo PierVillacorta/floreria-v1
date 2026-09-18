@@ -1,4 +1,38 @@
-# React + TypeScript + Vite
+# 🌸 Proyecto Florería
+
+## 👥 Integrantes
+* **Pier Villacorta**
+* **Elizabeth Troncoso**
+
+## 🛠️ Tecnologías Utilizadas
+* **React** + **Vite**
+* **TypeScript** / **JavaScript**
+* **TailwindCSS**
+
+---
+
+## 🏗️ Arquitectura Actual del Estado Global
+
+El sistema gestiona el estado global del **Carrito de compras** y del **Usuario** mediante la combinación de **`useContext`** y una función **`reducer`** (`useReducer`).
+
+* **`useContext`:** Centraliza el acceso al estado en toda la aplicación, eliminando el *prop drilling*.
+* **`useReducer`:** Controla las mutaciones de estado complejas (agregar productos, modificar cantidades, autenticación) a través de acciones puras e inmutables.
+
+
+### 1. Migración a Zustand 🐻
+Se reemplazará la arquitectura de `useContext` + `reducer` por **Zustand** para optimizar el desarrollo:
+* **Mayor rendimiento:** Evita re-renders innecesarios en componentes que no consumen propiedades específicas.
+* **Menos Boilerplate:** Reduce las líneas de código al eliminar la necesidad de envolver la aplicación en múltiples *Providers*.
+* **Sintaxis limpia:** Integración nativa y simplificada con TypeScript.
+
+### 2. Integración de Base de Datos 🗄️
+Se añadirá una capa de persistencia para transformar la aplicación de estática a dinámica:
+* **Persistencia de sesiones:** Registro y login de usuarios real.
+* **Sincronización del carrito:** Guardado automático de productos en la cuenta del usuario.
+* **Gestión de inventario:** Control de stock de flores y procesamiento de pedidos en tiempo real.
+
+
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
