@@ -11,15 +11,22 @@ import Login from "./page/Login.tsx";
 import Register from "./page/Register.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import InfoProduct from "./page/InfoProduct.tsx";
+import Layout from "./components/Layout.tsx";
 
 const router = createBrowserRouter([
-  { path: "/", element: <App /> },
-  { path: "/cart", element: <Cart /> },
-  { path: "/about", element: <About /> },
-  { path: "/login", element: <Login /> },
-  {path:"/product/:name",element:<InfoProduct/>},
-  { path: "/register", element: <Register /> },
-  { path: "*", element: <NotFoundPage /> },
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { index: true, element: <App /> },
+      { path: "cart", element: <Cart /> },
+      { path: "about", element: <About /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "product/:name", element: <InfoProduct /> },
+      { path: "*", element: <NotFoundPage /> },
+    ],
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
