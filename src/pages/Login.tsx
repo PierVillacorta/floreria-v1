@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+
 import type { User } from "../types/types";
+import { useAuthStore, type AuhtResponse } from "../store/authStore";
+import { isValidEmail, isValidPassword } from "../utils/Validators";
 
 const Login = () => {
-  const { login } = useAuth();
-  const [feedback, setFeedback] = useState<{
-    success: boolean;
-    message: string;
-  }>();
+  const { login } = useAuthStore();
+  const [feedback, setFeedback] = useState<AuhtResponse>();
   const [email, setEmail] = useState<User["email"]>("");
-  const [password, setPassword] = useState<User["password"]>("");
+  const [password, setPassword] = useState<User["password_hash"]>("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email.trim() || !password.trim()) {
       setFeedback({
@@ -22,10 +21,25 @@ const Login = () => {
       });
       return;
     }
-    const response = login(email, password);
+    if (!isValidEmail(email)) {
+      setFeedback({
+        success: false,
+        message:
+          "Solo se permiten correos @duoc.cl, @profesor.duoc.cl o @gmail.com",
+      });
+      return;
+    }
+    if (!isValidPassword(password)) {
+      setFeedback({
+        success: false,
+        message: "La contraseña debe tener entre 4 y 10 caracteres",
+      });
+      return;
+    }
+    const response = await login(email, password);
     setFeedback(response);
 
-    if (response.success) {
+    if (!response.success) {
       (setEmail(""), setPassword(""));
     }
   };
@@ -37,7 +51,6 @@ const Login = () => {
       alert(feedback?.message);
       navigate("/");
     } else {
-      alert(feedback?.message);
       (setEmail(""), setPassword(""));
     }
   }, [feedback]);
@@ -109,7 +122,11 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-
+          {feedback && !feedback.success && (
+            <p className="text-red-500 text-sm font-semibold text-center mb-2">
+              {feedback.message}
+            </p>
+          )}
           {/* Botón */}
           <button
             type="submit"

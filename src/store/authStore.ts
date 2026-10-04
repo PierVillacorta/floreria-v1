@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { PublicUser } from "../types/types";
+import type { PublicUser, UserRole } from "../types/types";
 
-type AuhtResponse = {
+export type AuhtResponse = {
   success: boolean;
   message: string;
 };
@@ -22,7 +22,7 @@ type AuthState = {
   deleteUser: (id:number) => Promise<AuhtResponse>;
 };
 
-
+const API_URL = import.meta.env.VITE_API_URL ?? ""
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -32,20 +32,20 @@ export const useAuthStore = create<AuthState>()(
       loading: false,
       authError: null,
 
-      register: async (name, email, password) => {
+      register: async (full_name, email, password) => {
         set({ loading: true, authError: null });
         try {
           const res = await fetch(`${API_URL}/auth/register`, {
             method: "POST",
             headers: { "Content-type": "application/json" },
-            body: JSON.stringify({ name, email, password }),
+            body: JSON.stringify({ full_name, email, password }),
           });
           const data = await res.json();
 
-          if (!res.ok) {
-            const message = data.message ?? "No se pudo registrar";
-            set({ loading: false, authError: message });
-            return { success: false, message };
+          if(data.status !== "OK"){
+            const message = data.status === "EMAIL_EXISTS" ? "El correo ya esta registrado" : "No se pudo crear la cuenta"
+            set({loading:false,authError:message})
+            return {success:false,message}
           }
 
           set({ loading: false });
@@ -66,13 +66,23 @@ export const useAuthStore = create<AuthState>()(
           });
 
           const data = await res.json();
-          if (!res.ok) {
-            const message = data.message ?? "Datos incorrectas";
+
+          if (data.status !== "OK") {
+            const message = "Datos incorrectos";
             set({ loading: false, authError: message });
             return { success: false, message };
           }
-          set({ user: data.user, token: data.token, loading: false });
-          return { success: true, message: "Bienvenido de nuevo" };
+          const user :PublicUser = {
+            id:data.user_id,
+            full_name : data.full_name,
+            email,
+            role:data.type as UserRole,
+            account_status : "ACTIVE"
+          }
+
+
+          set({ user: user, token: data.token, loading: false });
+          return { success: true, message: "Bienvenido!" };
         } catch {
           const message = "Error de conexion con el servidor";
           set({ loading: false, authError: message });

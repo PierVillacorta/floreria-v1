@@ -1,13 +1,13 @@
-export type Product = {
-  id: number;
-  product_name: string;
-  img_url: string;
-  stock: number;
-  precio: number;
-  description: string;
-  category_id: string;
-  category_stock?: number;
-};
+  export type Product = {
+    product_id: number;
+    product_name: string;
+    image_url: string;
+    stock: number;
+    price: number;
+    description: string;
+    category_id: string;
+    critical_stock?: number;
+  };
 
 export type Category = {
   category_id: number;

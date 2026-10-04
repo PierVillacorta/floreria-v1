@@ -1,42 +1,52 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { User } from "../types/types";
-import { useAuth } from "../hooks/useAuth";
+import { useAuthStore, type AuhtResponse } from "../store/authStore";
+import { isValidEmail, isValidPassword } from "../utils/Validators";
 
 const Register = () => {
-  const { register } = useAuth();
-  const [feedback, setFeedback] = useState<{
-    success: boolean;
-    message: string;
-  }>();
-  const [name, setName] = useState<User["name"]>("");
+  const { register } = useAuthStore();
+  const [feedback, setFeedback] = useState<AuhtResponse>();
+  const [name, setName] = useState<User["full_name"]>("");
   const [email, setEmail] = useState<User["email"]>("");
-  const [password, setPassword] = useState<User["password"]>("");
-  const navigate = useNavigate()
+  const [password, setPassword] = useState<User["password_hash"]>("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim || !password.trim()) {
+    if (!name.trim() || !email.trim() || !password.trim()) {
       setFeedback({
         success: false,
         message: "Todos los campos son obligatorios",
       });
-      return
+      return;
     }
-    const response = register(name, email, password);
+    if (!isValidEmail(email)) {
+      setFeedback({
+        success: false,
+        message:
+          "Solo se permiten correos @duoc.cl, @profesor.duoc.cl o @gmail.com",
+      });
+      return;
+    }
+    if (!isValidPassword(password)) {
+      setFeedback({
+        success: false,
+        message: "La contraseña debe tener entre 4 y 10 caracteres",
+      });
+      return;
+    }
+    const response = await register(name, email, password);
     setFeedback(response);
 
-    if (response.success) {
+    if (!response.success) {
       (setName(""), setEmail(""), setPassword(""));
     }
   };
   useEffect(() => {
-    if(!feedback){
-      return
-    }
-    alert(feedback?.message)
-    navigate("/login")
-  },[feedback])
+    if (!feedback) return;
+    if (feedback.success) navigate("/login");
+  }, [feedback]);
 
   return (
     <section className="min-h-screen w-full bg-white-semi px-6 flex items-center justify-center">
@@ -55,7 +65,6 @@ const Register = () => {
           className="rounded-2xl border border-amber-900/10 bg-white p-8 shadow-sm"
           onSubmit={handleSubmit}
         >
-         
           {/* nombre del usuario */}
           <div className="mb-5">
             <label
@@ -132,7 +141,11 @@ const Register = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-
+          {feedback && !feedback.success && (
+            <p className="text-red-500 text-sm font-semibold text-center mb-2">
+              {feedback.message}
+            </p>
+          )}
           {/* Botón */}
           <button
             type="submit"
@@ -162,13 +175,13 @@ const Register = () => {
         </form>
       </div>
       <Link
-          to="/"
-          className="absolute top-6 left-10 items-center gap-2 text-sm font-semibold
+        to="/"
+        className="absolute top-6 left-10 items-center gap-2 text-sm font-semibold
           uppercase tracking-wider text-brown-pc/60
           transition-colors duration-300 hover:text-amber-950"
-        >
-          ← Volver a la tienda
-        </Link>
+      >
+        ← Volver a la tienda
+      </Link>
     </section>
   );
 };

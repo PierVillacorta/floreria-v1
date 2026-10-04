@@ -10,7 +10,7 @@ const NotFoundPage = () => {
       <p className="py-4 text-base-content/70">
         Sorry, the page you are looking for does not exist or has been moved.
       </p>
-      <Link to={"/"} className="btn bg-amber-950">
+      <Link to={"/"} className="btn bg-amber-950 text-white-semi">
         Go Back Home
       </Link>
     </div>

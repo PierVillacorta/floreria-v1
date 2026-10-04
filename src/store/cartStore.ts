@@ -5,24 +5,24 @@ import { persist } from "zustand/middleware";
 type CartState = {
   cart: CartProduct[];
   addProduct: (product: Product) => void;
-  deleteProduct: (id: Product["id"]) => void;
-  increaseQuantity: (id: Product["id"]) => void;
-  decreaseQuantity: (id: Product["id"]) => void;
+  deleteProduct: (id: Product["product_id"]) => void;
+  increaseQuantity: (id: Product["product_id"]) => void;
+  decreaseQuantity: (id: Product["product_id"]) => void;
   clearCart: () => void;
   getTotal: () => number;
 };
 
-export const useCartState = create<CartState>()(
+export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       cart: [],
       addProduct: (product) =>
         set((state) => {
-          const productExist = state.cart.find((p) => p.id == product.id);
+          const productExist = state.cart.find((p) => p.product_id == product.product_id);
           if (productExist) {
             return {
               cart: state.cart.map((p) =>
-                p.id === product.id ? { ...p, amount: p.amount + 1 } : p,
+                p.product_id === product.product_id ? { ...p, amount: p.amount + 1 } : p,
               ),
             };
           }
@@ -32,21 +32,21 @@ export const useCartState = create<CartState>()(
         }),
       deleteProduct: (id) =>
         set((state) => ({
-          cart: state.cart.filter((p) => p.id !== id),
+          cart: state.cart.filter((p) => p.product_id !== id),
         })),
 
       increaseQuantity: (id) => {
         set((state) => ({
-          cart : state.cart.map( p => p.id === id ? {...p,amount:p.amount + 1} : p)
+          cart : state.cart.map( p => p.product_id === id ? {...p,amount:p.amount + 1} : p)
         }))
       },
       decreaseQuantity: (id) => {
         set((state) => ({
-          cart: state.cart.map(p => p.id === id && p.amount > 1 ? {...p,amount:p.amount - 1} : p)
+          cart: state.cart.map(p => p.product_id === id && p.amount > 1 ? {...p,amount:p.amount - 1} : p)
         }))
       },
       clearCart: () => set({cart : []}),
-      getTotal: () => get().cart.reduce((acc,p) => acc + p.precio * p.amount,0),
+      getTotal: () => get().cart.reduce((acc,p) => acc + p.price * p.amount,0),
     }),
 
     { name: "floreria-cart" },

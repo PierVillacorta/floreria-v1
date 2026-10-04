@@ -1,10 +1,8 @@
-
-import Home from "./page/Home";
+import Home from "./pages/Home";
 
 function App() {
   return (
     <>
-
       <span className="text-rotate text-3xl text-brown-pc mt-8 w-full block">
         <span className="justify-items-center flex flex-col items-center">
           <span>BIENVENIDO</span>
@@ -16,7 +14,6 @@ function App() {
       </span>
       <Home />
     </>
-
   );
 }
 
