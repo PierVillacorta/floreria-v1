@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useProductStore } from "../store/productStore";
 
-const Dashboard = () => {
+export const Dashboard = () => {
   const { products, categories, fetchProducts, fetchCategories } = useProductStore();
 
   useEffect(() => {
@@ -68,5 +68,3 @@ const Dashboard = () => {
     </div>
   );
 };
-
-export default Dashboard;

@@ -11,7 +11,7 @@ export const PaymentSuccess = () => {
   const { state } = useLocation();
   const { form, total, cart } = (state as LocationState) ?? {};
 
-  // Generamos un número de orden aleatorio para mostrar
+  // generar un numero aleatorio
   const orderNumber = Math.floor(Math.random() * 90000) + 10000;
 
   if (!form) {

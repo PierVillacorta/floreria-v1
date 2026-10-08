@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useProductStore } from "../store/productStore";
 import { useCartStore } from "../store/cartStore";
-import { Loading } from "../components/ui/Loading";
+import { Loading } from "../components/Loading";
 import type { Category } from "../types/types";
 
-const Categories = () => {
+export const Categories = () => {
   const { products, categories, loading, fetchProducts, fetchCategories } =
     useProductStore();
   const { addProduct } = useCartStore();
@@ -26,7 +26,7 @@ const Categories = () => {
 
 
   const filtered = selected
-    ? products.filter((p) => p.category_id == String(selected.category_id))
+    ? products.filter((p) => p.category_id == selected.category_id)
     : products;
 
   return (
@@ -131,5 +131,3 @@ const Categories = () => {
     </section>
   );
 };
-
-export default Categories;

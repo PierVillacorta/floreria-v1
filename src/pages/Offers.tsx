@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useProductStore } from "../store/productStore";
 import { useCartStore } from "../store/cartStore";
-import { Loading } from "../components/ui/Loading";
+import { Loading } from "../components/Loading";
 
 // Umbral de precio para considerar un producto en oferta
 const OFFER_PRICE = 25000;
 
-const Offers = () => {
+export const Offers = () => {
   const { products, loading, error, fetchProducts } = useProductStore();
   const { addProduct } = useCartStore();
 
@@ -105,4 +105,3 @@ const Offers = () => {
   );
 };
 
-export default Offers;

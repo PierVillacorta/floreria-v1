@@ -5,7 +5,7 @@ import type { User } from "../types/types";
 import { useAuthStore, type AuhtResponse } from "../store/authStore";
 import { isValidEmail, isValidPassword } from "../utils/Validators";
 
-const Login = () => {
+export const Login = () => {
   const { login } = useAuthStore();
   const [feedback, setFeedback] = useState<AuhtResponse>();
   const [email, setEmail] = useState<User["email"]>("");
@@ -156,16 +156,8 @@ const Login = () => {
           </p>
         </form>
       </div>
-      <Link
-        to="/"
-        className="absolute top-6 left-10 items-center gap-2 text-sm font-semibold
-          uppercase tracking-wider text-brown-pc/60
-          transition-colors duration-300 hover:text-amber-950"
-      >
-        ← Volver a la tienda
-      </Link>
+
     </section>
   );
 };
 
-export default Login;

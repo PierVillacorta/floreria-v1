@@ -1,9 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../store/cartStore";
 import { useAuthStore } from "../store/authStore";
 
-const Cart = () => {
-  const { cart, deleteProduct } = useCartStore();
+export const Cart = () => {
+  const { cart, deleteProduct, increaseQuantity, decreaseQuantity } =
+    useCartStore();
   const { user } = useAuthStore();
   const navigate = useNavigate();
 
@@ -13,26 +14,17 @@ const Cart = () => {
     (acc, product) => acc + product.price * product.amount,
     0,
   );
+  const cantTotal = cart.reduce((acc, p) => acc + p.amount, 0)
   const handlePay = () => {
     if (!user) {
       alert("Necesitas estar registrado o logeado para comprar");
       navigate("/login");
       return;
     }
-    navigate("/checkout")
+    navigate("/checkout");
   };
   return (
     <section className="min-h-screen w-full bg-white-semi px-6 py-10 text-brown-pc">
-      {/* Volver */}
-      <Link
-        to="/"
-        className="absolute top-6 left-10 items-center gap-2 text-sm font-semibold
-          uppercase tracking-wider text-brown-pc/60
-          transition-colors duration-300 hover:text-amber-950"
-      >
-        ← Volver a la tienda
-      </Link>
-
       <div className="mx-auto w-full max-w-4xl">
         {/* Título */}
         <header className="mb-10 text-center">
@@ -53,7 +45,6 @@ const Cart = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_300px]">
-
             {/* Productos */}
 
             <div>
@@ -88,10 +79,25 @@ const Cart = () => {
                         Precio: ${product.price.toLocaleString("es-CL")}
                       </p>
 
-                      <p className="text-sm text-white/70">
-                        Cantidad: {product.amount}
-                      </p>
-
+                      <div className="flex items-center gap-2 mt-1">
+                        <button
+                          onClick={() => decreaseQuantity(product.product_id)}
+                          className="h-7 w-7 rounded-full bg-white/20 hover:bg-white/30
+                          flex items-center justify-center font-bold transition-all cursor-pointer"
+                        >
+                          −
+                        </button>
+                        <span className="text-sm font-semibold w-6 text-center">
+                          {product.amount}
+                        </span>
+                        <button
+                          onClick={() => increaseQuantity(product.product_id)}
+                          className="h-7 w-7 rounded-full bg-white/20 hover:bg-white/30
+                          flex items-center justify-center font-bold transition-all cursor-pointer"
+                        >
+                          +
+                        </button>
+                      </div>
                       <p className="mt-1 font-semibold">
                         Total: $
                         {(product.price * product.amount).toLocaleString(
@@ -126,7 +132,7 @@ const Cart = () => {
 
               <div className="flex justify-between text-sm">
                 <span>Productos</span>
-                <span>{cart.length}</span>
+                <span>{cantTotal}</span>
               </div>
 
               <div className="mt-3 flex justify-between">
@@ -136,7 +142,7 @@ const Cart = () => {
                   ${total.toLocaleString("es-CL")}
                 </span>
               </div>
-
+              {/* boton pagar */}
               <button
                 className="mt-6 w-full rounded-lg bg-amber-950 px-5 py-3 font-semibold text-white
               hover:bg-amber-900 hover:scale-[1.02] active:scale-95 transition-all duration-300 cursor-pointer"
@@ -151,5 +157,3 @@ const Cart = () => {
     </section>
   );
 };
-
-export default Cart;

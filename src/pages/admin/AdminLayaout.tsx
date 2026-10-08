@@ -1,7 +1,7 @@
 import { NavLink, Outlet, Navigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
 
-const AdminLayout = () => {
+export const AdminLayout = () => {
   const { user } = useAuthStore();
 
   // Por si el usuario no es admin
@@ -70,4 +70,3 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;

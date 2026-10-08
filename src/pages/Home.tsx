@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import ProductCard from "../components/ProductCard";
 import { useProductStore } from "../store/productStore";
-import { Loading } from "../components/ui/Loading";
-const Home = () => {
+import { Loading } from "../components/Loading";
+export const Home = () => {
   const { products, error, fetchProducts, loading } = useProductStore();
 
   useEffect(() => {
@@ -22,4 +22,3 @@ const Home = () => {
   );
 };
 
-export default Home;

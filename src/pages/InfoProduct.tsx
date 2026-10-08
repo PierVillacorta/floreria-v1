@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import { useCartStore } from "../store/cartStore";
 import { useProductStore } from "../store/productStore";
-import { Loading } from "../components/ui/Loading";
+import { Loading } from "../components/Loading";
 
 export const InfoProduct = () => {
   const { product_id } = useParams();
@@ -39,23 +39,11 @@ export const InfoProduct = () => {
 
   return (
     <section className="min-h-screen w-full bg-white-semi px-6 py-10 text-brown-pc">
-      {/* Volver */}
-      <div className="mx-auto mb-8 max-w-6xl">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-sm font-semibold
-            uppercase tracking-wider text-brown-pc/60
-            transition-colors duration-300 hover:text-amber-950"
-        >
-          ← Volver a la tienda
-        </Link>
-      </div>
-
       {/* Producto */}
       <div className="mx-auto max-w-6xl">
         <div className="grid overflow-hidden rounded-3xl bg-white shadow-sm md:grid-cols-2">
           {/* Imagen */}
-          <div className="flex min-h-[450px] items-center justify-center bg-brown-pc p-8">
+          <div className="flex min-h-112.5 items-center justify-center bg-brown-pc p-8">
             <div className="h-full w-full max-w-lg overflow-hidden rounded-2xl">
               <img
                 src={product.image_url}

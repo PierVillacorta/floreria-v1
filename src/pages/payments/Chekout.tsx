@@ -8,7 +8,6 @@ export const Checkout = () => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
 
-  // Pre-llenamos con los datos del usuario si está logueado
   const [form, setForm] = useState({
     full_name: user?.full_name ?? "",
     email:     user?.email ?? "",
@@ -26,7 +25,6 @@ export const Checkout = () => {
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-    // Limpia el error del campo cuando el usuario empieza a escribir
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
@@ -49,7 +47,7 @@ export const Checkout = () => {
       return;
     }
 
-    // Simulamos el pago — 80% éxito, 20% fallo (como no hay pasarela real)
+    // Simulamos de el pago ( 80% éxito, 20% fallo )
     const success = Math.random() > 0.2;
 
     if (success) {
@@ -60,7 +58,7 @@ export const Checkout = () => {
     }
   };
 
-  // Si el carrito está vacío, redirige a la tienda
+  // si esta vacio , redirigir a la tienda
   if (cart.length === 0) {
     return (
       <section className="min-h-screen flex flex-col items-center justify-center bg-white-semi text-brown-pc">
@@ -93,7 +91,7 @@ export const Checkout = () => {
             {/* Resumen de productos */}
             <div className="rounded-2xl border border-amber-900/10 bg-white p-6 shadow-sm">
               <h2 className="text-lg font-bold uppercase mb-4">
-                Productos ({cart.length})
+                Productos :
               </h2>
               <ul className="flex flex-col gap-3">
                 {cart.map((p) => (
@@ -243,13 +241,11 @@ export const Checkout = () => {
               PAGAR ${total.toLocaleString("es-CL")}
             </button>
           </form>
-
-          {/* Resumen lateral */}
           <aside className="h-fit rounded-2xl border border-amber-900/10 bg-amber-50/70 p-6 shadow-sm sticky top-6">
             <h2 className="text-lg font-bold uppercase mb-4">Resumen</h2>
             <div className="flex justify-between text-sm mb-2">
               <span>Productos</span>
-              <span>{cart.length}</span>
+              <span>{cart.reduce((acc, p) => acc + p.amount, 0)}</span>
             </div>
             <div className="h-px bg-brown-pc/10 my-4" />
             <div className="flex justify-between font-bold text-xl">

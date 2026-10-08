@@ -1,10 +1,8 @@
-import { Link } from "react-router-dom";
-
-const About = () => {
+export const About = () => {
   return (
     <section className="min-h-screen w-full bg-white-semi text-brown-pc px-6 py-20">
       <div className="mx-auto max-w-6xl">
-        {/* Encabezado */}
+      
         <div className="text-center mb-16">
           <p className="text-sm tracking-[0.3em] uppercase font-medium mb-3">
             Nuestra historia
@@ -65,17 +63,7 @@ const About = () => {
             “Hacemos de cada momento un recuerdo especial.”
           </p>
         </div> 
-        <Link
-          to="/"
-          className="absolute top-6 left-10 items-center gap-2 text-sm font-semibold
-          uppercase tracking-wider text-brown-pc/60
-          transition-colors duration-300 hover:text-amber-950"
-        >
-          ← Volver a la tienda
-        </Link>
       </div>
     </section>
   );
 };
-
-export default About;

@@ -4,7 +4,7 @@ import type { User } from "../types/types";
 import { useAuthStore, type AuhtResponse } from "../store/authStore";
 import { isValidEmail, isValidPassword } from "../utils/Validators";
 
-const Register = () => {
+export const Register = () => {
   const { register } = useAuthStore();
   const [feedback, setFeedback] = useState<AuhtResponse>();
   const [name, setName] = useState<User["full_name"]>("");
@@ -146,6 +146,7 @@ const Register = () => {
               {feedback.message}
             </p>
           )}
+
           {/* Botón */}
           <button
             type="submit"
@@ -160,7 +161,6 @@ const Register = () => {
             REGISTRARSE
           </button>
 
-          {/* Registro */}
           <p className="mt-6 text-center text-sm text-brown-pc/60">
             ¿tienes una cuenta?
             <Link
@@ -174,16 +174,6 @@ const Register = () => {
           </p>
         </form>
       </div>
-      <Link
-        to="/"
-        className="absolute top-6 left-10 items-center gap-2 text-sm font-semibold
-          uppercase tracking-wider text-brown-pc/60
-          transition-colors duration-300 hover:text-amber-950"
-      >
-        ← Volver a la tienda
-      </Link>
     </section>
   );
 };
-
-export default Register;
