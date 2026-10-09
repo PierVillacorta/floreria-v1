@@ -1,5 +1,4 @@
-import type { ProductForm, Category } from "../types/types";
-
+  import type { ProductForm, Category } from "../../types/types";
 interface ProductModalProps {
   mode: "edit" | "create";
   form: ProductForm;
