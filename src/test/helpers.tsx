@@ -17,7 +17,7 @@ export const renderWithRouter = (ui: ReactElement, entry: Entry = "/") =>
     </MemoryRouter>,
   );
 
-/** Renderiza un componente en una ruta con parámetros, ej: renderAtRoute("/product/:product_id", <InfoProduct />, "/product/3") */
+/** Renderiza un componente en una ruta con parámetros, ej: renderAtRoute("/product/:product_id", <InfoProduct>, "/product/3") */
 export const renderAtRoute = (path: string, element: ReactElement, url: string) =>
   render(
     <MemoryRouter initialEntries={[url]}>

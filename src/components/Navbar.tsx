@@ -10,7 +10,6 @@ export const Navbar = () => {
   const links = [
     { to: "/categories", label: "Categorías" },
     { to: "/offers", label: "Ofertas" },
-    { to: "/cart", label: "Carrito" },
     { to: "/about", label: "Sobre Nosotros" },
     { to: "/blogs", label: "Blog" },
     ...(user?.role === "ADMIN" ? [{ to: "/admin", label: "Admin" }] : []),
@@ -20,10 +19,12 @@ export const Navbar = () => {
     <header className="w-full bg-brown-pc shadow-md">
       <div className="max-w-10/12 mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between py-4 gap-4 md:gap-0">
         
+        {/* Logo */}
         <Link to="/" className="md:ml-6">
           <img src={logo} alt="logo_floreria" className="w-16 h-16 rounded-xl object-cover" />
         </Link>
 
+        {/* Links de Navegación Centrales */}
         <nav className="flex-1 flex justify-center">
           <ul className="flex flex-wrap justify-center items-center gap-4 md:gap-8 font-bold uppercase text-sm md:text-base">
             {user && (
@@ -39,7 +40,12 @@ export const Navbar = () => {
           </ul>
         </nav>
 
-        <div className="shrink-0 flex items-center gap-4 mr-2 md:mr-6">
+        {/* Sección Derecha: Carrito + Auth */}
+        <div className="shrink-0 flex items-center gap-4 sm:gap-6 mr-2 md:mr-6">
+          <Link to="/cart" className={linkClass}>
+            Carrito
+          </Link>
+
           {user ? (
             <button className="btn btn-neutral border-none bg-brown-pc text-white-semi text-sm md:text-lg" onClick={logout}>
               Cerrar sesión
