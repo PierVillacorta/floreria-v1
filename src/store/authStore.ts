@@ -105,7 +105,7 @@ export const useAuthStore = create<AuthState>()(
           if(!res.ok){
             const message = data.message ?? "No se pudo elimanar el usuario"
             set({loading:false,authError:message})
-            return {success:true , message}
+            return {success:false , message}
           }
           set({loading:false})
           return {success:true,message:"Usuario eliminado correctamente"}

@@ -102,7 +102,7 @@ describe("authStore (fetch mockeado)", () => {
 
     // BUG: en authStore.deleteUser, cuando res.ok es false devuelve success:true.
     // Cámbialo a success:false en el store y reemplaza it.skip por it.
-    it.skip("debe retornar success:false si el backend responde con error", async () => {
+    it("debe retornar success:false si el backend responde con error", async () => {
       mockFetch({ message: "No autorizado" }, false);
       const res = await useAuthStore.getState().deleteUser(5);
       expect(res.success).toBe(false);
