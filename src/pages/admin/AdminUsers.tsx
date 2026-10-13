@@ -3,7 +3,7 @@ import { Loading } from "../../components/Loading";
 import { UserModal } from "../../components/modals/UserModal";
 import { CreateUserModal } from "../../components/modals/CreateUserModal";
 import { useUserStore } from "../../store/usersStore";
-import type { Product, UserRow } from "../../types/types";
+import type { UserRow } from "../../types/types";
 
 const defaultNewUser = { full_name: "", email: "", password: "", role: "CUSTOMER" };
 
