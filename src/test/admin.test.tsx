@@ -132,8 +132,8 @@ it("crear con nombre llama a createProduct y cierra el modal", async () => {
 
   it("'Editar' abre el modal con los datos del producto y guarda los cambios", async () => {
     renderWithRouter(<AdminProducts />);
-    await userEvent.click(screen.getAllByRole("button", { name: /Editar Producto/i })[0]);
-    expect(screen.getByRole("heading", { name: /Editar Producto/i })).toBeInTheDocument();
+    await userEvent.click(screen.getAllByRole("button", { name: /Editar/i })[0]);
+    expect(screen.getByRole("heading", { name: /Editar/i })).toBeInTheDocument();
     const nombre = screen.getByPlaceholderText("Nombre del producto");
     expect(nombre).toHaveValue("Rosas Rojas");
     fireEvent.change(nombre, { target: { name: "product_name", value: "Rosas Premium" } });
@@ -146,7 +146,7 @@ it("crear con nombre llama a createProduct y cierra el modal", async () => {
   it("si el guardado falla muestra el mensaje del store", async () => {
     mocks.updateProduct.mockResolvedValue({ success: false, message: "No se pudo actualizar" });
     renderWithRouter(<AdminProducts />);
-    await userEvent.click(screen.getAllByRole("button", { name: "Editar Producto" })[0]);
+    await userEvent.click(screen.getAllByRole("button", { name: /Editar/i })[0]);
     await userEvent.click(screen.getByRole("button", { name: "Guardar cambios" }));
     await waitFor(() => expect(window.alert).toHaveBeenCalledWith("No se pudo actualizar"));
   });

@@ -168,7 +168,7 @@ export const AdminProducts = () => {
                           onClick={() => openEdit(p)}
                           className="text-amber-800 hover:text-amber-600 font-semibold text-xs uppercase cursor-pointer"
                         >
-                          Editar Producto
+                          Editar 
                         </button>
                         <button
                           onClick={() => handleDelete(p)}
