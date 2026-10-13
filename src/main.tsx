@@ -7,7 +7,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import NotFoundPage from "./components/NotFoundPage.tsx";
 
-
 import { InfoProduct } from "./pages/InfoProduct.tsx";
 import Layout from "./components/Layout.tsx";
 import { Categories } from "./pages/Categories.tsx";

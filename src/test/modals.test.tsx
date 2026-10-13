@@ -15,7 +15,7 @@ describe("CategoryModal", () => {
 
   it("muestra el título y el nombre actual", () => {
     render(<CategoryModal {...base} />);
-    expect(screen.getByText("Editar categoría")).toBeInTheDocument();
+    expect(screen.getByText(/Editar categoría/i)).toBeInTheDocument();
     expect(screen.getByDisplayValue("Rosas")).toBeInTheDocument();
   });
 
@@ -34,21 +34,21 @@ describe("CategoryModal", () => {
 });
 
 describe("CreateUserModal", () => {
-  const newUser = { full_name: "", email: "", password: "", role: "CUSTOMER" };
+  const newUser = { full_name: "Juan Pérez", email: "juan@ejemplo.com", password: "password123", role: "CUSTOMER" };
   const base = { newUser, creating: false, onChange: vi.fn(), onClose: vi.fn(), onCreate: vi.fn() };
   beforeEach(() => vi.clearAllMocks());
 
   it("muestra los campos y los roles CUSTOMER y SELLER", () => {
     render(<CreateUserModal {...base} />);
-    expect(screen.getByPlaceholderText("Nombre completo")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Email")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Nombre")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("correo@ejemplo.com")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Contraseña")).toBeInTheDocument();
     expect(screen.getAllByRole("option", hidden).map((o) => o.textContent)).toEqual(["CUSTOMER", "SELLER"]);
   });
 
   it("notifica el campo y el valor que cambia", () => {
     render(<CreateUserModal {...base} />);
-    fireEvent.change(screen.getByPlaceholderText("Email"), { target: { value: "a@gmail.com" } });
+    fireEvent.change(screen.getByPlaceholderText("correo@ejemplo.com"), { target: { value: "a@gmail.com" } });
     expect(base.onChange).toHaveBeenCalledWith("email", "a@gmail.com");
     fireEvent.change(screen.getByRole("combobox", hidden), { target: { value: "SELLER" } });
     expect(base.onChange).toHaveBeenCalledWith("role", "SELLER");
@@ -56,16 +56,16 @@ describe("CreateUserModal", () => {
 
   it("Crear llama a onCreate y Cancelar a onClose", async () => {
     render(<CreateUserModal {...base} />);
-    await userEvent.click(screen.getByRole("button", { name: "Crear", ...hidden }));
-    await userEvent.click(screen.getByRole("button", { name: "Cancelar", ...hidden }));
+    await userEvent.click(screen.getByRole("button", { name: /crear usuario/i, ...hidden }));
+    await userEvent.click(screen.getByRole("button", { name: /cancelar/i, ...hidden }));
     expect(base.onCreate).toHaveBeenCalledTimes(1);
     expect(base.onClose).toHaveBeenCalledTimes(1);
   });
 
   it("con creating=true deshabilita los botones", () => {
     render(<CreateUserModal {...base} creating />);
-    expect(screen.getByRole("button", { name: "Creando...", ...hidden })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Cancelar", ...hidden })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /guardando/i, ...hidden })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /cancelar/i, ...hidden })).toBeDisabled();
   });
 });
 
@@ -79,13 +79,13 @@ describe("ProductModal", () => {
 
   it("modo edit: título y botón 'Guardar cambios'", () => {
     render(<ProductModal {...base} />);
-    expect(screen.getByText("Editar producto")).toBeInTheDocument();
+    expect(screen.getByText(/Editar producto/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Guardar cambios", ...hidden })).toBeInTheDocument();
   });
 
   it("modo create: título y botón 'Crear producto'", () => {
     render(<ProductModal {...base} mode="create" />);
-    expect(screen.getByText("Nuevo producto")).toBeInTheDocument();
+    expect(screen.getByText(/Nuevo producto/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Crear producto", ...hidden })).toBeInTheDocument();
   });
 
@@ -118,7 +118,7 @@ describe("UserModal", () => {
 
   it("sin usuario seleccionado no muestra el formulario", () => {
     render(<UserModal {...base} selected={null} />);
-    expect(screen.getByText("Editar usuario")).toBeInTheDocument();
+    expect(screen.getByText(/Editar usuario/i)).toBeInTheDocument();
     expect(screen.queryByText("Rol")).not.toBeInTheDocument();
   });
 

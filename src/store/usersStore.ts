@@ -13,8 +13,8 @@ type UserState = {
   users: UserRow[];
   loading: boolean;
   error: string | null;
-  createUser: (data: CreateUserType) => Promise<AuhtResponse>;
   fetchUsers: () => Promise<void>;
+  createUser: (data: CreateUserType) => Promise<AuhtResponse>;
   deleteUser: (id: number) => Promise<AuhtResponse>;
   updateUser: (
     id: number,

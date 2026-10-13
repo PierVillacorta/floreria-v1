@@ -80,21 +80,9 @@ export const AdminLayout = () => {
             </NavLink>
           ))}
         </nav>
-
-        <div className="p-4 border-t border-white/10">
-          <NavLink
-            to="/"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm
-              font-semibold text-white/70 hover:bg-white/10 hover:text-white
-              transition-all duration-200"
-          >
-            🛍️ Ver tienda
-          </NavLink>
-        </div>
       </aside>
 
-      {/* Contenido Principal */}
+      {/* Contenido principal */}
       <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-x-auto">
         <Outlet />
       </main>

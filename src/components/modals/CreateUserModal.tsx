@@ -75,7 +75,7 @@ export const CreateUserModal = ({
           </div>
 
           <div className="modal-action flex justify-end gap-2 mt-6">
-            <button type="button" onClick={onClose} className="btn btn-ghost">
+            <button type="button" onClick={onClose} className="btn btn-ghost" disabled={creating}>
               Cancelar
             </button>
             <button

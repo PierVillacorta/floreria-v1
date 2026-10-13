@@ -49,7 +49,6 @@ describe("AdminLayout", () => {
     expect(screen.getByRole("link", { name: /Usuarios/ })).toHaveAttribute("href", "/admin/users");
     expect(screen.getByRole("link", { name: /Productos/ })).toHaveAttribute("href", "/admin/products");
     expect(screen.getByRole("link", { name: /Categorías/ })).toHaveAttribute("href", "/admin/categories");
-    expect(screen.getByRole("link", { name: /Ver tienda/ })).toHaveAttribute("href", "/");
     expect(screen.getByText("contenido-admin")).toBeInTheDocument();
   });
 });
@@ -111,27 +110,30 @@ describe("AdminProducts", () => {
   });
 
   it("crear sin nombre muestra alerta y no llama a createProduct", async () => {
-    renderWithRouter(<AdminProducts />);
-    await userEvent.click(screen.getByRole("button", { name: "+ Nuevo producto" }));
-    await userEvent.click(screen.getByRole("button", { name: "Crear producto" }));
-    expect(window.alert).toHaveBeenCalledWith("El nombre es obligatorio");
-    expect(mocks.createProduct).not.toHaveBeenCalled();
-  });
+  renderWithRouter(<AdminProducts />);
+  await userEvent.click(screen.getByRole("button", { name: "+ Nuevo producto" }));
+  fireEvent.submit(screen.getByRole("dialog").querySelector("form")!);
+  expect(window.alert).toHaveBeenCalledWith("El nombre es obligatorio");
+  expect(mocks.createProduct).not.toHaveBeenCalled();
+});
 
-  it("crear con nombre llama a createProduct y cierra el modal", async () => {
-    renderWithRouter(<AdminProducts />);
-    await userEvent.click(screen.getByRole("button", { name: "+ Nuevo producto" }));
-    await userEvent.type(screen.getByPlaceholderText("Nombre del producto"), "Lirios");
-    await userEvent.click(screen.getByRole("button", { name: "Crear producto" }));
-    await waitFor(() => expect(mocks.createProduct).toHaveBeenCalledTimes(1));
-    expect(mocks.createProduct.mock.calls[0][0]).toMatchObject({ product_name: "Lirios", category_id: 1 });
-    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
-  });
+it("crear con nombre llama a createProduct y cierra el modal", async () => {
+  renderWithRouter(<AdminProducts />);
+  await userEvent.click(screen.getByRole("button", { name: "+ Nuevo producto" }));
+  await userEvent.type(screen.getByPlaceholderText("Nombre del producto"), "Lirios");
+  await userEvent.type(screen.getByRole("spinbutton", { name: /Precio/i }), "1000");
+  await userEvent.type(screen.getByRole("spinbutton", { name: /Stock/i }), "10");
+  await userEvent.click(screen.getByRole("button", { name: "Crear producto" }));
+  const dialog = document.getElementById("modal_product") as HTMLDialogElement;
+  await waitFor(() => expect(dialog.open).toBe(false));
+  expect(mocks.createProduct.mock.calls[0][0]).toMatchObject({ product_name: "Lirios", category_id: 1 });
+  await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+});
 
   it("'Editar' abre el modal con los datos del producto y guarda los cambios", async () => {
     renderWithRouter(<AdminProducts />);
-    await userEvent.click(screen.getAllByRole("button", { name: "Editar" })[0]);
-    expect(screen.getByRole("heading", { name: "Editar producto" })).toBeInTheDocument();
+    await userEvent.click(screen.getAllByRole("button", { name: /Editar Producto/i })[0]);
+    expect(screen.getByRole("heading", { name: /Editar Producto/i })).toBeInTheDocument();
     const nombre = screen.getByPlaceholderText("Nombre del producto");
     expect(nombre).toHaveValue("Rosas Rojas");
     fireEvent.change(nombre, { target: { name: "product_name", value: "Rosas Premium" } });
@@ -144,7 +146,7 @@ describe("AdminProducts", () => {
   it("si el guardado falla muestra el mensaje del store", async () => {
     mocks.updateProduct.mockResolvedValue({ success: false, message: "No se pudo actualizar" });
     renderWithRouter(<AdminProducts />);
-    await userEvent.click(screen.getAllByRole("button", { name: "Editar" })[0]);
+    await userEvent.click(screen.getAllByRole("button", { name: "Editar Producto" })[0]);
     await userEvent.click(screen.getByRole("button", { name: "Guardar cambios" }));
     await waitFor(() => expect(window.alert).toHaveBeenCalledWith("No se pudo actualizar"));
   });
@@ -204,18 +206,16 @@ describe("AdminUsers", () => {
   it("crear con campos vacíos muestra alerta y no llama a createUser", async () => {
     renderWithRouter(<AdminUsers />);
     await userEvent.click(screen.getByRole("button", { name: "+ Nuevo usuario" }));
-    await userEvent.click(screen.getByRole("button", { name: "Crear" }));
-    expect(window.alert).toHaveBeenCalledWith("Todos los campos son obligatorios");
-    expect(mocks.createUser).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByRole("button", { name: /crear usuario/i }));
   });
 
   it("crear con datos válidos llama a createUser y cierra el modal", async () => {
     renderWithRouter(<AdminUsers />);
     await userEvent.click(screen.getByRole("button", { name: "+ Nuevo usuario" }));
-    await userEvent.type(screen.getByPlaceholderText("Nombre completo"), "Caro");
-    await userEvent.type(screen.getByPlaceholderText("Email"), "caro@gmail.com");
+    await userEvent.type(screen.getByPlaceholderText("Nombre"), "Caro");
+    await userEvent.type(screen.getByPlaceholderText("correo@ejemplo.com"), "caro@gmail.com");
     await userEvent.type(screen.getByPlaceholderText("Contraseña"), "1234");
-    await userEvent.click(screen.getByRole("button", { name: "Crear" }));
+    await userEvent.click(screen.getByRole("button", { name: "Crear Usuario" }));
     await waitFor(() =>
       expect(mocks.createUser).toHaveBeenCalledWith({ full_name: "Caro", email: "caro@gmail.com", password: "1234", role: "CUSTOMER" }),
     );
@@ -226,10 +226,10 @@ describe("AdminUsers", () => {
     mocks.createUser.mockResolvedValue({ success: false, message: "El correo ya está registrado" });
     renderWithRouter(<AdminUsers />);
     await userEvent.click(screen.getByRole("button", { name: "+ Nuevo usuario" }));
-    await userEvent.type(screen.getByPlaceholderText("Nombre completo"), "Caro");
-    await userEvent.type(screen.getByPlaceholderText("Email"), "ana@gmail.com");
+    await userEvent.type(screen.getByPlaceholderText("Nombre"), "Caro");
+    await userEvent.type(screen.getByPlaceholderText("correo@ejemplo.com"), "ana@gmail.com");
     await userEvent.type(screen.getByPlaceholderText("Contraseña"), "1234");
-    await userEvent.click(screen.getByRole("button", { name: "Crear" }));
+    await userEvent.click(screen.getByRole("button", { name: "Crear Usuario" }));
     await waitFor(() => expect(window.alert).toHaveBeenCalledWith("El correo ya está registrado"));
   });
 

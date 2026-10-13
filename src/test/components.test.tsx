@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Route, Routes } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
-import Footer from "../components/Footer";
+import {Footer} from "../components/Footer";
 import Layout from "../components/Layout";
 import { Loading } from "../components/Loading";
 import NotFoundPage from "../components/NotFoundPage";
@@ -70,10 +70,10 @@ describe("Navbar", () => {
 
 describe("Footer", () => {
   it("muestra las tres secciones", () => {
-    render(<Footer />);
-    expect(screen.getByText("Services")).toBeInTheDocument();
-    expect(screen.getByText("Company")).toBeInTheDocument();
-    expect(screen.getByText("Legal")).toBeInTheDocument();
+    renderWithRouter(<Footer />);
+    expect(screen.getByText("Secciones")).toBeInTheDocument();
+    expect(screen.getByText("Nosotros")).toBeInTheDocument();
+    expect(screen.getByText("Contáctanos")).toBeInTheDocument();
   });
 });
 
@@ -104,7 +104,7 @@ describe("Layout", () => {
     );
     expect(screen.getByAltText("logo_floreria")).toBeInTheDocument();
     expect(screen.getByText("contenido-hijo")).toBeInTheDocument();
-    expect(screen.getByText("Legal")).toBeInTheDocument();
+    expect(screen.getByText("Contáctanos")).toBeInTheDocument(); 
   });
 });
 

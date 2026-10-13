@@ -14,11 +14,11 @@ export const Home = () => {
   if (error)
      return <p className="text-center mt-32 text-red-500">{error}</p>;
   return (
-    <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-10 mt-24">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-10 mt-24">
       {products.map((product) => (
         <ProductCard product={product} key={product.product_id} />
       ))}
-    </main>
+    </div>
   );
 };
 

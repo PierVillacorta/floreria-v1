@@ -52,7 +52,7 @@ export const AdminProducts = () => {
       description: product.description,
       critical_stock: product.critical_stock ?? 0,
       image_url: product.image_url,
-      category_id: Number(product.category_id),
+      category_id: product.category_id,
     });
     toggleModal(true);
   };
@@ -60,7 +60,7 @@ export const AdminProducts = () => {
   const openCreate = () => {
     setMode("create");
     setSelected(null);
-    setForm({ ...emptyForm, category_id: Number(categories[0]?.category_id ?? 0) });
+    setForm({ ...emptyForm, category_id:categories[0]?.category_id});
     toggleModal(true);
   };
 
@@ -68,19 +68,18 @@ export const AdminProducts = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+    const isNumericField = ["price", "stock", "critical_stock", "category_id"].includes(name)
     setForm((prev) => ({
       ...prev,
-      [name]: ["price", "stock", "critical_stock", "category_id"].includes(name)
-        ? Number(value)
-        : value,
+      [name]: isNumericField
+        ? value === "" ? 0 : Number(value): value,
     }));
   };
 
   const handleSave = async () => {
     if (!form.product_name.trim()) return alert("El nombre es obligatorio");
     setSaving(true);
-    const result =
-      mode === "edit"
+    const result = mode === "edit"
         ? await updateProduct(selected!.product_id, form)
         : await createProduct(form as any);
     setSaving(false);
@@ -88,12 +87,15 @@ export const AdminProducts = () => {
     else alert(result.message);
   };
 
-  const handleDelete = async (id: number) => {
-    if (confirm("¿Eliminar este producto?")) {
-      const result = await deleteProduct(id);
-      if (!result.success) alert(result.message);
+ const handleDelete = async (product: Product) => {
+
+  if (confirm(`¿Eliminar ${product.product_name}?`)) {
+    const result = await deleteProduct(product.product_id);
+    if (!result.success) {
+      alert(result.message);
     }
-  };
+  }
+};
 
   if (loading) return <Loading />;
   if (error) return <p className="text-red-500 font-semibold p-4">{error}</p>;
@@ -116,7 +118,7 @@ export const AdminProducts = () => {
         </button>
       </div>
 
-      {/* Contenedor de la tabla de productos */}
+      {/* Contenedor de la tabla  productos */}
       <div className="rounded-2xl border border-amber-900/10 bg-white shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left min-w-150">
@@ -166,10 +168,10 @@ export const AdminProducts = () => {
                           onClick={() => openEdit(p)}
                           className="text-amber-800 hover:text-amber-600 font-semibold text-xs uppercase cursor-pointer"
                         >
-                          Editar
+                          Editar Producto
                         </button>
                         <button
-                          onClick={() => handleDelete(p.product_id)}
+                          onClick={() => handleDelete(p)}
                           className="text-red-500 hover:text-red-700 font-semibold text-xs uppercase cursor-pointer"
                         >
                           Eliminar

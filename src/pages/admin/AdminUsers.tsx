@@ -3,7 +3,7 @@ import { Loading } from "../../components/Loading";
 import { UserModal } from "../../components/modals/UserModal";
 import { CreateUserModal } from "../../components/modals/CreateUserModal";
 import { useUserStore } from "../../store/usersStore";
-import type { UserRow } from "../../types/types";
+import type { Product, UserRow } from "../../types/types";
 
 const defaultNewUser = { full_name: "", email: "", password: "", role: "CUSTOMER" };
 
@@ -67,12 +67,14 @@ export const AdminUsers = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (confirm("¿Estás seguro de eliminar este usuario?")) {
-      const result = await deleteUser(id);
-      if (!result.success) alert(result.message);
+  const handleDelete = async (user: UserRow) => {
+  if (confirm(`¿Eliminar al usuario ${user.full_name}?`)) {
+    const result = await deleteUser(user.user_id);
+    if (!result.success) {
+      alert(result.message);
     }
-  };
+  }
+};
 
   if (loading) return <Loading />;
   if (error) return <p className="text-red-500">{error}</p>;
@@ -137,7 +139,7 @@ export const AdminUsers = () => {
                       Editar
                     </button>
                     <button
-                      onClick={() => handleDelete(u.user_id)}
+                      onClick={() => handleDelete(u)}
                       className="text-red-500 hover:text-red-700 font-semibold text-xs uppercase cursor-pointer"
                     >
                       Eliminar
