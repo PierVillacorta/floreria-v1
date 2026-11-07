@@ -6,6 +6,7 @@ import type { Product, ProductForm } from "../../types/types";
 
 const emptyForm: ProductForm = {
   product_name: "",
+  product_code: "",
   price: 0,
   stock: 0,
   description: "",
@@ -47,6 +48,7 @@ export const AdminProducts = () => {
     setSelected(product);
     setForm({
       product_name: product.product_name,
+      product_code: product.product_code,
       price: product.price,
       stock: product.stock,
       description: product.description,
@@ -77,11 +79,10 @@ export const AdminProducts = () => {
   };
 
   const handleSave = async () => {
+    if (form.product_code.trim().length < 3) return alert("El código debe tener al menos 3 caracteres");
     if (!form.product_name.trim()) return alert("El nombre es obligatorio");
     setSaving(true);
-    const result = mode === "edit"
-        ? await updateProduct(selected!.product_id, form)
-        : await createProduct(form as any);
+    const result = mode === "edit" ? await updateProduct(selected!.product_id, form) : await createProduct(form);
     setSaving(false);
     if (result.success) toggleModal(false);
     else alert(result.message);

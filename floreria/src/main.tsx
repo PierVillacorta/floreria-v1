@@ -26,6 +26,14 @@ import { About } from "./pages/About.tsx";
 import { Login } from "./pages/Login.tsx";
 import { Register } from "./pages/Register.tsx";
 
+import { configureApi } from "./utils/api.ts";
+import { useAuthStore } from "./store/authStore.ts";
+
+configureApi({
+  getToken: () => useAuthStore.getState().token,
+  onUnauthorized: () => useAuthStore.getState().logout(),
+});
+
 const router = createBrowserRouter([
   {
     path: "/",

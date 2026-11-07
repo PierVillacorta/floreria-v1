@@ -1,4 +1,4 @@
-import {  useRef } from "react";
+import { useRef } from "react";
 import type { ProductForm, Category } from "../../types/types";
 
 type ProductModalProps = {
@@ -7,7 +7,9 @@ type ProductModalProps = {
   categories: Category[];
   saving: boolean;
   onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => void;
   onSave: () => void;
 };
@@ -30,7 +32,10 @@ export const ProductModal = ({
       aria-labelledby="product-modal-title"
     >
       <div className="modal-box bg-white text-brown-pc max-w-lg">
-        <h3 id="product-modal-title" className="font-bold text-lg uppercase mb-4">
+        <h3
+          id="product-modal-title"
+          className="font-bold text-lg uppercase mb-4"
+        >
           {mode === "create" ? "Nuevo producto" : "Editar producto"}
         </h3>
 
@@ -41,9 +46,24 @@ export const ProductModal = ({
           }}
           className="space-y-4"
         >
+          <div>
+            <label className="block text-sm font-semibold mb-1">Código *</label>
+            <input
+              name="product_code"
+              value={form.product_code}
+              onChange={onChange}
+              placeholder="Ej: ROS-001"
+              className="w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-2 text-brown-pc outline-none focus:border-brown-pc/60 transition-all"
+            />
+          </div>
           {/* Nombre */}
           <div>
-            <label htmlFor="product_name" className="block text-xs font-bold uppercase mb-1">Nombre *</label>
+            <label
+              htmlFor="product_name"
+              className="block text-xs font-bold uppercase mb-1"
+            >
+              Nombre *
+            </label>
             <input
               type="text"
               name="product_name"
@@ -58,9 +78,14 @@ export const ProductModal = ({
           {/* Precio y Stock */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="price" className="block text-xs font-bold uppercase mb-1">Precio *</label>
+              <label
+                htmlFor="price"
+                className="block text-xs font-bold uppercase mb-1"
+              >
+                Precio *
+              </label>
               <input
-              id="price"
+                id="price"
                 type="number"
                 name="price"
                 min="0"
@@ -74,9 +99,14 @@ export const ProductModal = ({
             </div>
 
             <div>
-              <label htmlFor="stock" className="block text-xs font-bold uppercase mb-1">Stock *</label>
+              <label
+                htmlFor="stock"
+                className="block text-xs font-bold uppercase mb-1"
+              >
+                Stock *
+              </label>
               <input
-              id="stock"
+                id="stock"
                 type="number"
                 name="stock"
                 min="0"
@@ -93,7 +123,12 @@ export const ProductModal = ({
           {/* Stock Crítico y Categoría */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="critical_stock" className="block text-xs font-bold uppercase mb-1">Stock crítico</label>
+              <label
+                htmlFor="critical_stock"
+                className="block text-xs font-bold uppercase mb-1"
+              >
+                Stock crítico
+              </label>
               <input
                 type="number"
                 name="critical_stock"
@@ -107,7 +142,12 @@ export const ProductModal = ({
             </div>
 
             <div>
-              <label htmlFor="category_id" className="block text-xs font-bold uppercase mb-1">Categoría *</label>
+              <label
+                htmlFor="category_id"
+                className="block text-xs font-bold uppercase mb-1"
+              >
+                Categoría *
+              </label>
               <select
                 name="category_id"
                 value={form.category_id}
@@ -126,7 +166,12 @@ export const ProductModal = ({
 
           {/* URL Imagen */}
           <div>
-            <label htmlFor="image_url" className="block text-xs font-bold uppercase mb-1">URL de imagen</label>
+            <label
+              htmlFor="image_url"
+              className="block text-xs font-bold uppercase mb-1"
+            >
+              URL de imagen
+            </label>
             <input
               type="text"
               name="image_url"
@@ -139,7 +184,12 @@ export const ProductModal = ({
 
           {/* Descripción */}
           <div>
-            <label htmlFor="description" className="block text-xs font-bold uppercase mb-1">Descripción</label>
+            <label
+              htmlFor="description"
+              className="block text-xs font-bold uppercase mb-1"
+            >
+              Descripción
+            </label>
             <textarea
               name="description"
               value={form.description}
@@ -164,7 +214,11 @@ export const ProductModal = ({
               disabled={saving}
               className="btn bg-amber-950 text-white hover:bg-amber-900 border-none font-semibold px-6"
             >
-              {saving ? "Guardando..." : mode === "create" ? "Crear producto" : "Guardar cambios"}
+              {saving
+                ? "Guardando..."
+                : mode === "create"
+                  ? "Crear producto"
+                  : "Guardar cambios"}
             </button>
           </div>
         </form>

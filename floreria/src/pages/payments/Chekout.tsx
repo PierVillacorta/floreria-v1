@@ -11,9 +11,6 @@ export const Checkout = () => {
   const [form, setForm] = useState({
     full_name: user?.full_name ?? "",
     email:     user?.email ?? "",
-    address:   user?.address ?? "",
-    region:    user?.region ?? "",
-    commune:   user?.commune ?? "",
     notes:     "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -32,9 +29,6 @@ export const Checkout = () => {
     const newErrors: Record<string, string> = {};
     if (!form.full_name.trim()) newErrors.full_name = "El nombre es obligatorio";
     if (!form.email.trim())     newErrors.email = "El correo es obligatorio";
-    if (!form.address.trim())   newErrors.address = "La dirección es obligatoria";
-    if (!form.region.trim())    newErrors.region = "La región es obligatoria";
-    if (!form.commune.trim())   newErrors.commune = "La comuna es obligatoria";
     return newErrors;
   };
 
@@ -162,7 +156,7 @@ export const Checkout = () => {
                   <label className="block text-sm font-semibold mb-1">
                     Calle y número *
                   </label>
-                  <input
+                  {/* <input
                     name="address"
                     value={form.address}
                     onChange={handleChange}
@@ -170,7 +164,7 @@ export const Checkout = () => {
                     className="w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-3
                       text-brown-pc outline-none focus:border-brown-pc/60
                       focus:ring-2 focus:ring-brown-pc/10 transition-all duration-300"
-                  />
+                  /> */}
                   {errors.address && (
                     <p className="text-red-500 text-xs mt-1">{errors.address}</p>
                   )}
@@ -181,7 +175,7 @@ export const Checkout = () => {
                     <label className="block text-sm font-semibold mb-1">
                       Región *
                     </label>
-                    <input
+                    {/* <input
                       name="region"
                       value={form.region}
                       onChange={handleChange}
@@ -189,7 +183,7 @@ export const Checkout = () => {
                       className="w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-3
                         text-brown-pc outline-none focus:border-brown-pc/60
                         focus:ring-2 focus:ring-brown-pc/10 transition-all duration-300"
-                    />
+                    /> */}
                     {errors.region && (
                       <p className="text-red-500 text-xs mt-1">{errors.region}</p>
                     )}
@@ -199,7 +193,7 @@ export const Checkout = () => {
                     <label className="block text-sm font-semibold mb-1">
                       Comuna *
                     </label>
-                    <input
+                    {/* <input
                       name="commune"
                       value={form.commune}
                       onChange={handleChange}
@@ -207,7 +201,7 @@ export const Checkout = () => {
                       className="w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-3
                         text-brown-pc outline-none focus:border-brown-pc/60
                         focus:ring-2 focus:ring-brown-pc/10 transition-all duration-300"
-                    />
+                    /> */}
                     {errors.commune && (
                       <p className="text-red-500 text-xs mt-1">{errors.commune}</p>
                     )}

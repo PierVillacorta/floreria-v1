@@ -1,6 +1,8 @@
+// src/store/usersStore.ts
 import { create } from "zustand";
 import type { AuhtResponse } from "./authStore";
 import type { UserRow } from "../types/types";
+import { apiFetch, errorMessage } from "../utils/api";
 
 type CreateUserType = {
   full_name: string;
@@ -9,94 +11,71 @@ type CreateUserType = {
   role: string;
 };
 
+// El backend exige los tres campos en el PUT (ya no es una actualización parcial)
+type UpdateUserType = Pick<UserRow, "full_name" | "role" | "account_status">;
+
 type UserState = {
   users: UserRow[];
   loading: boolean;
   error: string | null;
   fetchUsers: () => Promise<void>;
   createUser: (data: CreateUserType) => Promise<AuhtResponse>;
+  updateUser: (id: number, data: UpdateUserType) => Promise<AuhtResponse>;
   deleteUser: (id: number) => Promise<AuhtResponse>;
-  updateUser: (
-    id: number,
-    data: Partial<Pick<UserRow, "full_name" | "role" | "account_status">>,
-  ) => Promise<AuhtResponse>;
 };
-
-const API_URL = import.meta.env.VITE_API_URL ?? "";
 
 export const useUserStore = create<UserState>()((set, get) => ({
   users: [],
   loading: false,
   error: null,
 
-  createUser: async (data) => {
-    try {
-      const res = await fetch(`${API_URL}/auth/users`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const result = await res.json();
-      if (result.status === "EMAIL_EXISTS") {
-        return { success: false, message: "El correo ya está registrado" };
-      }
-      if (result.status !== "OK") {
-        return { success: false, message: "No se pudo crear el usuario" };
-      }
-      await get().fetchUsers();
-      return { success: true, message: "Usuario creado correctamente" };
-    } catch {
-      return {success:false,message:"Error de conexion"}
-    }
-  },
   fetchUsers: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch(`${API_URL}/auth/users`);
-      const data = await res.json();
-      set({ users: data.items, loading: false });
-    } catch {
-      set({ error: "No se pudieron cargar los usuarios", loading: false });
+      const users = await apiFetch<UserRow[]>("/users", { auth: true });
+      set({ users, loading: false });
+    } catch (error) {
+      set({ error: errorMessage(error), loading: false });
     }
   },
 
-  deleteUser: async (id) => {
+  createUser: async (data) => {
     try {
-      const res = await fetch(`${API_URL}/auth/users/${id}`, {
-        method: "DELETE",
+      const created = await apiFetch<UserRow>("/users", {
+        method: "POST",
+        body: data,
+        auth: true,
       });
-      const data = await res.json();
-
-      if (data.status === "OK") {
-        set({ users: get().users.filter((u) => u.user_id !== id) });
-        return { success: true, message: "Usuario eliminado" };
-      }
-      return { success: false, message: "No se pudo eliminar" };
-    } catch {
-      return { success: false, message: "Error de conexión" };
+      set({ users: [...get().users, created] });
+      return { success: true, message: "Usuario creado correctamente" };
+    } catch (error) {
+      return { success: false, message: errorMessage(error) };
     }
   },
 
   updateUser: async (id, data) => {
     try {
-      const res = await fetch(`${API_URL}/auth/users/${id}`, {
+      const updated = await apiFetch<UserRow>(`/users/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: data,
+        auth: true,
       });
-      const result = await res.json();
+      set({
+        users: get().users.map((u) => (u.user_id === id ? updated : u)),
+      });
+      return { success: true, message: "Usuario actualizado" };
+    } catch (error) {
+      return { success: false, message: errorMessage(error) };
+    }
+  },
 
-      if (result.status === "OK") {
-        set({
-          users: get().users.map((u) =>
-            u.user_id === id ? { ...u, ...data } : u,
-          ),
-        });
-        return { success: true, message: "Usuario actualizado" };
-      }
-      return { success: false, message: "No se pudo actualizar" };
-    } catch {
-      return { success: false, message: "Error de conexión" };
+  deleteUser: async (id) => {
+    try {
+      await apiFetch(`/users/${id}`, { method: "DELETE", auth: true });
+      set({ users: get().users.filter((u) => u.user_id !== id) });
+      return { success: true, message: "Usuario eliminado" };
+    } catch (error) {
+      return { success: false, message: errorMessage(error) };
     }
   },
 }));

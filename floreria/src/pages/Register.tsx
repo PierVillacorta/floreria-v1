@@ -9,7 +9,7 @@ export const Register = () => {
   const [feedback, setFeedback] = useState<AuhtResponse>();
   const [name, setName] = useState<User["full_name"]>("");
   const [email, setEmail] = useState<User["email"]>("");
-  const [password, setPassword] = useState<User["password_hash"]>("");
+  const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

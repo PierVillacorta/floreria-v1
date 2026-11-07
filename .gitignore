@@ -1,7 +1,7 @@
 # Frontend (React/Vite)
 floreria/node_modules/
 floreria/.env
-
+.vscode/
 # Backend (Java / Maven)
 floreria-api/target/
 floreria-api/.mvn/
