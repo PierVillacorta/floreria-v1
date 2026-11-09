@@ -1,4 +1,4 @@
-// src/types/types.ts
+
 export type UserRole = "ADMIN" | "CUSTOMER" | "SELLER";
 
 export type Product = {
@@ -24,10 +24,17 @@ export type User = {
   full_name: string;
   email: string;
   role: UserRole;
+  address: string | null;
+  region: string | null;
+  commune: string | null;
   account_status: "ACTIVE" | "INACTIVE";
 };
 
 export type PublicUser = User;
+export type NewUserPayload = Omit<User,"user_id" | "account_status"> &{
+  password:string;
+}
+export type RegisterData = Omit<NewUserPayload, "role">;
 
 export type ProductForm = {
   product_code: string;
@@ -39,6 +46,7 @@ export type ProductForm = {
   image_url: string;
   category_id: number;
 };
+
 
 // Fila del listado de usuarios del admin
 export type UserRow = {

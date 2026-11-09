@@ -1,7 +1,6 @@
-// src/store/authStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { PublicUser } from "../types/types";
+import type { PublicUser, RegisterData } from "../types/types";
 import { apiFetch, errorMessage } from "../utils/api";
 
 export type AuhtResponse = {
@@ -23,9 +22,7 @@ type AuthState = {
   loading: boolean;
   authError: string | null;
   register: (
-    name: string,
-    email: string,
-    password: string,
+    data : RegisterData,
   ) => Promise<AuhtResponse>;
   login: (email: string, password: string) => Promise<AuhtResponse>;
   logout: () => void;
@@ -39,12 +36,12 @@ export const useAuthStore = create<AuthState>()(
       loading: false,
       authError: null,
 
-      register: async (full_name, email, password) => {
+      register: async (data) => {
         set({ loading: true, authError: null });
         try {
           await apiFetch("/auth/register", {
             method: "POST",
-            body: { full_name, email, password },
+            body:  data ,
           });
           set({ loading: false });
           return { success: true, message: "Cuenta creada correctamente!!" };
@@ -62,7 +59,6 @@ export const useAuthStore = create<AuthState>()(
             method: "POST",
             body: { email, password },
           });
-          // El backend ya devuelve el usuario completo: no hay que armarlo a mano
           set({ user: data.user, token: data.token, loading: false });
           return { success: true, message: "Bienvenido!" };
         } catch (error) {

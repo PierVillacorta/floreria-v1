@@ -10,15 +10,16 @@ export const Register = () => {
   const [name, setName] = useState<User["full_name"]>("");
   const [email, setEmail] = useState<User["email"]>("");
   const [password, setPassword] = useState<string>("");
+  const [address, setAddress] = useState("");
+  const [region, setRegion] = useState("");
+  const [commune, setCommune] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || !password.trim()) {
-      setFeedback({
-        success: false,
-        message: "Todos los campos son obligatorios",
-      });
+    if (!name.trim() || !email.trim() || !password.trim() ||
+        !address.trim() || !region.trim() || !commune.trim()) {
+      setFeedback({ success: false, message: "Todos los campos son obligatorios" });
       return;
     }
     if (!isValidEmail(email)) {
@@ -36,11 +37,11 @@ export const Register = () => {
       });
       return;
     }
-    const response = await register(name, email, password);
+    const response = await register({full_name: name,email,password,address,region,commune});
     setFeedback(response);
 
     if (!response.success) {
-      (setName(""), setEmail(""), setPassword(""));
+      setPassword("");
     }
   };
   useEffect(() => {
@@ -116,6 +117,25 @@ export const Register = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
+          {[
+            { id: "address", label: "Calle y número", value: address, set: setAddress, placeholder: "Ej: Av. Providencia 1234" },
+            { id: "region", label: "Región", value: region, set: setRegion, placeholder: "Ej: Región Metropolitana" },
+            { id: "commune", label: "Comuna", value: commune, set: setCommune, placeholder: "Ej: Providencia" },
+          ].map(({ id, label, value, set, placeholder }) => (
+          <div key={id} className="mb-5">
+            <label htmlFor={id} className="mb-2 block text-sm font-semibold text-brown-pc">
+                      {label}
+            </label>
+            <input
+              id={id}
+              type="text"
+              value={value}
+              placeholder={placeholder}
+              className="w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-3 text-brown-pc outline-none focus:border-brown-pc/60 focus:ring-2 focus:ring-brown-pc/10 transition-all duration-300"
+                onChange={(e) => set(e.target.value)}
+              />
+          </div>
+          ))}
 
           {/* Password */}
           <div className="mb-6">

@@ -63,12 +63,16 @@ public class User {
         this.userType = userType;
         this.accountStatus = accountStatus;
     }
-    public User(String fullName, String email, String passwordHash, UserType userType) {
+    public User(String fullName, String email, String passwordHash, UserType userType,
+            String address, String region, String commune) {
         this.fullName = fullName;
         this.email = email;
         this.passwordHash = passwordHash;
         this.userType = userType;
         this.accountStatus = "ACTIVE";
+        this.address = address;
+        this.region = region;
+        this.commune = commune;
     }
 
     public Long getId() { return id; }

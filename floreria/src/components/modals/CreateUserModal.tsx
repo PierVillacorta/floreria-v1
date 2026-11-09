@@ -1,5 +1,7 @@
+import type { NewUserPayload } from "../../types/types"; 
+
 type CreateUserModalProps = {
-  newUser: { full_name: string; email: string; password: string; role: string };
+  newUser: NewUserPayload;
   creating: boolean;
   onChange: (field: string, value: string) => void;
   onClose: () => void;
@@ -18,6 +20,8 @@ export const CreateUserModal = ({
     onCreate();
   };
 
+  const inputStyle = "w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-3 text-brown-pc outline-none focus:border-brown-pc/60 focus:ring-2 focus:ring-brown-pc/10 transition-all";
+
   return (
     <dialog id="modal_create_user" className="modal">
       <div className="modal-box bg-white text-brown-pc">
@@ -30,7 +34,7 @@ export const CreateUserModal = ({
               type="text"
               value={newUser.full_name}
               onChange={(e) => onChange("full_name", e.target.value)}
-              className="w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-3 text-brown-pc outline-none focus:border-brown-pc/60 focus:ring-2 focus:ring-brown-pc/10 transition-all"
+              className={inputStyle}
               placeholder="Nombre"
               required
             />
@@ -42,7 +46,7 @@ export const CreateUserModal = ({
               type="email"
               value={newUser.email}
               onChange={(e) => onChange("email", e.target.value)}
-              className="w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-3 text-brown-pc outline-none focus:border-brown-pc/60 focus:ring-2 focus:ring-brown-pc/10 transition-all"
+              className={inputStyle}
               placeholder="correo@ejemplo.com"
               autoComplete="username"
               required
@@ -55,13 +59,46 @@ export const CreateUserModal = ({
               type="password"
               value={newUser.password}
               onChange={(e) => onChange("password", e.target.value)}
-              className="w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-3 text-brown-pc outline-none focus:border-brown-pc/60 focus:ring-2 focus:ring-brown-pc/10 transition-all"
+              className={inputStyle}
               placeholder="Contraseña"
               autoComplete="new-password"
               required
             />
           </div>
-
+          <div>
+            <label className="block text-xs font-bold uppercase mb-1">Calle y número</label>
+            <input
+              type="text"
+              placeholder="Calle y número"
+              className={inputStyle}
+              value={newUser.address || ""}
+              onChange={(e) => onChange("address", e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase mb-1">Región</label>
+            <input
+              type="text"
+              placeholder="Región"
+              className={inputStyle}
+              value={newUser.region || ""}
+              onChange={(e) => onChange("region", e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase mb-1">Comuna</label>
+            <input
+              type="text"
+              placeholder="Comuna"
+              className={inputStyle}
+              value={newUser.commune || ""}
+              onChange={(e) => onChange("commune", e.target.value)}
+              required
+            />
+          </div>
+          {/* Selector de Rol */}
           <div>
             <label className="block text-xs font-bold uppercase mb-1">Rol</label>
             <select

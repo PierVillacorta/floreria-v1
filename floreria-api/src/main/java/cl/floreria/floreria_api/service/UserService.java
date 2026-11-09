@@ -51,7 +51,10 @@ public class UserService {
                 request.fullName().trim(),
                 request.email(),
                 passwordEncoder.encode(request.password()),
-                type);
+                type,
+                request.address().trim(),
+                request.region().trim(),
+                request.commune().trim());
 
         return UserResponse.from(userRepository.save(user));
     }

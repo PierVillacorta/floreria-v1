@@ -1,5 +1,6 @@
 package cl.floreria.floreria_api.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import cl.floreria.floreria_api.entity.User;
 
 public record UserResponse(
@@ -7,7 +8,10 @@ public record UserResponse(
         @JsonProperty("full_name") String fullName,
         String email,
         String role,
-        @JsonProperty("account_status") String accountStatus) {
+        @JsonProperty("account_status") String accountStatus,
+        String address,
+        String region,
+        String commune) {
 
     public static UserResponse from(User u) {
         return new UserResponse(
@@ -15,6 +19,9 @@ public record UserResponse(
                 u.getFullName(),
                 u.getEmail(),
                 u.getUserType().getName(),
-                u.getAccountStatus());
+                u.getAccountStatus(),
+                u.getAddress(),
+                u.getRegion(),
+                u.getCommune());
     }
 }

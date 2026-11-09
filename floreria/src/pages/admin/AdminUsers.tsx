@@ -3,9 +3,18 @@ import { Loading } from "../../components/Loading";
 import { UserModal } from "../../components/modals/UserModal";
 import { CreateUserModal } from "../../components/modals/CreateUserModal";
 import { useUserStore } from "../../store/usersStore";
-import type { UserRow } from "../../types/types";
+import type { NewUserPayload, UserRow } from "../../types/types";
 
-const defaultNewUser = { full_name: "", email: "", password: "", role: "CUSTOMER" };
+const defaultNewUser: NewUserPayload = { 
+  full_name: "", 
+  email: "", 
+  password: "", 
+  role: "CUSTOMER",
+  address: "",
+  region: "",
+  commune: ""
+};
+
 
 export const AdminUsers = () => {
   const { deleteUser, fetchUsers, updateUser, createUser, error, loading, users } = useUserStore();
@@ -34,9 +43,11 @@ export const AdminUsers = () => {
   };
 
   const handleCreate = async () => {
-    if (!form.full_name.trim() || !form.email.trim() || !form.password.trim()) {
-      return alert("Todos los campos son obligatorios");
-    }
+      if (!form.full_name.trim() || !form.email.trim() || !form.password.trim() ||
+          !(form.address ?? "").trim() || !(form.region)?.trim() || !(form.commune ?? "").trim()) {
+          alert("Todos los campos son obligatorios");
+          return;
+      }
     setIsSubmitting(true);
     const result = await createUser(form);
     setIsSubmitting(false);

@@ -39,10 +39,13 @@ public class AuthService {
                 .orElseThrow(() -> new IllegalStateException("Falta el tipo de usuario CUSTOMER"));
 
         User user = new User(
-                request.fullName().trim(),
-                request.email(),
-                passwordEncoder.encode(request.password()),
-                customer);
+            request.fullName().trim(),
+            request.email(),
+            passwordEncoder.encode(request.password()),
+            customer,
+            request.address().trim(),
+            request.region().trim(),
+            request.commune().trim());
 
         return UserResponse.from(userRepository.save(user));
     }
