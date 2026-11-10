@@ -78,3 +78,6 @@ crea  el .env y agrega = VITE_API_URL=http://localhost:8080/api
 
 ###Para el backend 
 En el archivo .env.example estan las indicaciones
+
+
+http://localhost:8080/swagger-ui/index.html
