@@ -73,7 +73,8 @@ cd floreria
 pnpm install
 pnpm dev
 ```
-para el front
+### para el front
 crea  el .env y agrega = VITE_API_URL=http://localhost:8080/api
-Para el backend 
+
+###Para el backend 
 En el archivo .env.example estan las indicaciones
