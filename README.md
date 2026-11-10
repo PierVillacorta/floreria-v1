@@ -18,7 +18,7 @@ y la interfaz de usuario (Frontend), optimizado para trabajar con contenedores.
 * **TypeScript** / **JavaScript**
 * **pnpm** (Gestor de paquetes)
 * **ESLint** (Linter de código)
-
+* **Tailwindcss** (Estilos de html) con Daysiui (Libreria de componentes)
 ### Backend
 * **Spring Boot** (Java)
 * Base de Datos (PostgreSQL)
