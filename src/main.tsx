@@ -25,6 +25,7 @@ import { Cart } from "./pages/Cart.tsx";
 import { About } from "./pages/About.tsx";
 import { Login } from "./pages/Login.tsx";
 import { Register } from "./pages/Register.tsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
     <RouterProvider router={router} />
+    </GoogleOAuthProvider>
   </StrictMode>,
 );

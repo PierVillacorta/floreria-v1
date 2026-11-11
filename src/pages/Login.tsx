@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 
 import type { User } from "../types/types";
 import { useAuthStore, type AuhtResponse } from "../store/authStore";
 import { isValidEmail, isValidPassword } from "../utils/Validators";
 
 export const Login = () => {
-  const { login } = useAuthStore();
+  const { login,loginWithGoogle } = useAuthStore();
+  
   const [feedback, setFeedback] = useState<AuhtResponse>();
   const [email, setEmail] = useState<User["email"]>("");
-  const [password, setPassword] = useState<User["password_hash"]>("");
+  const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,6 +45,14 @@ export const Login = () => {
       (setEmail(""), setPassword(""));
     }
   };
+  const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
+  if (!credentialResponse.credential) {
+    setFeedback({ success: false, message: "Google no entregó credenciales" });
+    return;
+  }
+  const response = await loginWithGoogle(credentialResponse.credential);
+  setFeedback(response);
+};
   useEffect(() => {
     if (!feedback) {
       return;
@@ -143,6 +153,21 @@ export const Login = () => {
           </button>
 
           {/* Registro */}
+          <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-wider text-brown-pc/40">
+              <span className="h-px flex-1 bg-brown-pc/10" />
+              o
+              <span className="h-px flex-1 bg-brown-pc/10" />
+          </div>
+
+          <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() =>
+                  setFeedback({ success: false, message: "No se pudo iniciar sesión con Google" })
+                }
+                text="continue_with"
+              />
+          </div>
           <p className="mt-6 text-center text-sm text-brown-pc/60">
             ¿No tienes una cuenta?
             <Link
@@ -160,4 +185,3 @@ export const Login = () => {
     </section>
   );
 };
-
