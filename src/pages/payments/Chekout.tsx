@@ -1,22 +1,41 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import { useAuthStore } from "../../store/authStore";
+import { useOrderStore } from "../../store/orderStore";
+
+type CheckoutForm = {
+  full_name: string;
+  email: string;
+  address: string;
+  region: string;
+  commune: string;
+  notes: string;
+};
 
 export const Checkout = () => {
   const { cart, getTotal, clearCart } = useCartStore();
   const { user } = useAuthStore();
+  const { createOrder } = useOrderStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [form, setForm] = useState({
-    full_name: user?.full_name ?? "",
-    email:     user?.email ?? "",
-    address:   user?.address ?? "",
-    region:    user?.region ?? "",
-    commune:   user?.commune ?? "",
-    notes:     "",
-  });
+  // Si venimos de "volver a intentar" conservamos lo que el cliente había escrito
+  const saved = (location.state as { form?: CheckoutForm } | null)?.form;
+
+  const [form, setForm] = useState<CheckoutForm>(
+    saved ?? {
+      full_name: user?.full_name ?? "",
+      email:     user?.email ?? "",
+      address:   user?.address ?? "",
+      region:    user?.region ?? "",
+      commune:   user?.commune ?? "",
+      notes:     "",
+    },
+  );
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const total = getTotal();
 
@@ -38,7 +57,7 @@ export const Checkout = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors = validate();
 
@@ -47,14 +66,35 @@ export const Checkout = () => {
       return;
     }
 
-    // Simulamos de el pago ( 80% éxito, 20% fallo )
-    const success = Math.random() > 0.2;
+    setSubmitting(true);
+    setSubmitError(null);
 
-    if (success) {
+    // Solo enviamos ids y cantidades: el servidor calcula precios y total
+    const result = await createOrder({
+      customer_name: form.full_name.trim(),
+      customer_email: form.email.trim(),
+      address: form.address.trim(),
+      region: form.region.trim(),
+      commune: form.commune.trim(),
+      notes: form.notes.trim(),
+      items: cart.map((p) => ({ product_id: p.product_id, quantity: p.amount })),
+    });
+
+    setSubmitting(false);
+
+    // Error real (sin stock, sesión vencida, datos inválidos...): se muestra aquí
+    if (!result.success) {
+      setSubmitError(result.message);
+      return;
+    }
+
+    // Un pago fallido NO es un error HTTP: la orden existe con status FAILED
+    if (result.data.status === "PAID") {
       clearCart();
-      navigate("/payment-success", { state: { form, total, cart } });
+      navigate("/payment-success", { state: { order: result.data } });
     } else {
-      navigate("/payment-error", { state: { form, total, cart } });
+      // El carrito se conserva para poder reintentar
+      navigate("/payment-error", { state: { order: result.data } });
     }
   };
 
@@ -232,13 +272,19 @@ export const Checkout = () => {
               </div>
             </div>
 
+            {submitError && (
+              <p className="text-center text-sm font-semibold text-red-500">{submitError}</p>
+            )}
+
             <button
               type="submit"
+              disabled={submitting}
               className="w-full rounded-xl bg-amber-950 px-6 py-4 font-semibold
                 tracking-wide text-white transition-all duration-300
-                hover:bg-amber-900 hover:scale-[1.01] active:scale-95 cursor-pointer"
+                hover:bg-amber-900 hover:scale-[1.01] active:scale-95 cursor-pointer
+                disabled:cursor-not-allowed disabled:opacity-50"
             >
-              PAGAR ${total.toLocaleString("es-CL")}
+              {submitting ? "PROCESANDO..." : `PAGAR $${total.toLocaleString("es-CL")}`}
             </button>
           </form>
           <aside className="h-fit rounded-2xl border border-amber-900/10 bg-amber-50/70 p-6 shadow-sm sticky top-6">

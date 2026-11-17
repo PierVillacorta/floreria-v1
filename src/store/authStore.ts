@@ -9,7 +9,6 @@ export type AuhtResponse = {
   message: string;
 };
 
-// Respuesta de POST /api/auth/login
 type LoginResponse = {
   token: string;
   token_type: string;
@@ -59,7 +58,6 @@ export const useAuthStore = create<AuthState>()(
             method: "POST",
             body: { email, password },
           });
-          // El backend ya devuelve el usuario completo: no hay que armarlo a mano
           set({ user: data.user, token: data.token, loading: false });
           return { success: true, message: "Bienvenido!" };
         } catch (error) {
@@ -68,9 +66,6 @@ export const useAuthStore = create<AuthState>()(
           return { success: false, message };
         }
       },
-
-      // 'credential' es el ID token que entrega Google; el backend lo verifica
-      // y responde con NUESTRO token, igual que en el login normal
       loginWithGoogle: async (credential) => {
         set({ loading: true, authError: null });
         try {

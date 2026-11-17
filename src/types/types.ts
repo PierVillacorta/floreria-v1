@@ -17,16 +17,16 @@ export type Category = {
   category_name: string;
 };
 
-// Lo que la API devuelve de un usuario. Nunca incluye la contraseña.
+// Lo que la API devuelve de un usuario
 export type User = {
   user_id: number;
   full_name: string;
   email: string;
   role: UserRole;
+  account_status: "ACTIVE" | "INACTIVE";
   address: string | null;
   region: string | null;
   commune: string | null;
-  account_status: "ACTIVE" | "INACTIVE";
 };
 
 export type PublicUser = User;
@@ -58,3 +58,42 @@ export type UserRow = {
 
 export type NewProduct = Omit<Product, "product_id">;
 export type CartProduct = Product & { amount: number };
+
+//  Ordenes
+export type OrderStatus = "PAID" | "FAILED";
+
+export type OrderItem = {
+  product_id: number;
+  product_name: string;
+  unit_price: number;
+  quantity: number;
+  subtotal: number;
+};
+
+
+export type OrderSummary = {
+  order_id: number;
+  status: OrderStatus;
+  total: number;
+  created_at: string;
+  customer_name: string;
+  customer_email: string;
+};
+
+export type Order = OrderSummary & {
+  address: string;
+  region: string;
+  commune: string;
+  notes: string | null;
+  items: OrderItem[];
+};
+
+export type CreateOrderPayload = {
+  customer_name: string;
+  customer_email: string;
+  address: string;
+  region: string;
+  commune: string;
+  notes: string;
+  items: { product_id: number; quantity: number }[];
+};

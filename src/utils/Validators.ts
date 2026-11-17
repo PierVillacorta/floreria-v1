@@ -1,4 +1,4 @@
-const ALLOWED_DOMAINS = ["@duoc.cl", "@profesor.duoc.cl", "@gmail.com","@floreria.com"]
+const ALLOWED_DOMAINS = ["@duoc.cl", "@profesor.duoc.cl", "@gmail.com", "@floreria.com", "@admin.com","@duocuc.cl"]
 
 export const isValidEmail = (email: string): boolean => {
   const emailLower = email.toLowerCase().trim();

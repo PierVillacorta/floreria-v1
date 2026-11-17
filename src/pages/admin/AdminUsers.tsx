@@ -3,12 +3,28 @@ import { Loading } from "../../components/Loading";
 import { UserModal } from "../../components/modals/UserModal";
 import { CreateUserModal } from "../../components/modals/CreateUserModal";
 import { useUserStore } from "../../store/usersStore";
-import type { UserRow } from "../../types/types";
+import type { NewUserPayload, UserRow } from "../../types/types";
 
-const defaultNewUser = { full_name: "", email: "", password: "", role: "CUSTOMER" };
+const defaultNewUser:NewUserPayload = {
+  full_name: "",
+  email: "",
+  password: "",
+  role: "CUSTOMER",
+  address: "",
+  region: "",
+  commune: ""
+};
 
 export const AdminUsers = () => {
-  const { deleteUser, fetchUsers, updateUser, createUser, error, loading, users } = useUserStore();
+  const {
+    deleteUser,
+    fetchUsers,
+    updateUser,
+    createUser,
+    error,
+    loading,
+    users,
+  } = useUserStore();
 
   const [form, setForm] = useState(defaultNewUser);
   const [selected, setSelected] = useState<UserRow | null>(null);
@@ -68,13 +84,13 @@ export const AdminUsers = () => {
   };
 
   const handleDelete = async (user: UserRow) => {
-  if (confirm(`¿Eliminar al usuario ${user.full_name}?`)) {
-    const result = await deleteUser(user.user_id);
-    if (!result.success) {
-      alert(result.message);
+    if (confirm(`¿Eliminar al usuario ${user.full_name}?`)) {
+      const result = await deleteUser(user.user_id);
+      if (!result.success) {
+        alert(result.message);
+      }
     }
-  }
-};
+  };
 
   if (loading) return <Loading />;
   if (error) return <p className="text-red-500">{error}</p>;
@@ -98,25 +114,32 @@ export const AdminUsers = () => {
         <table className="w-full text-sm">
           <thead className="bg-brown-pc text-white uppercase text-xs tracking-wider">
             <tr>
-              {["ID", "Nombre", "Email", "Rol", "Estado", "Acciones"].map((h) => (
-                <th key={h} className="px-6 py-4 text-left">
-                  {h}
-                </th>
-              ))}
+              {["ID", "Nombre", "Email", "Rol", "Estado", "Acciones"].map(
+                (h) => (
+                  <th key={h} className="px-6 py-4 text-left">
+                    {h}
+                  </th>
+                ),
+              )}
             </tr>
           </thead>
           <tbody className="divide-y divide-amber-900/5">
             {users
               .filter((u) => u.role !== "ADMIN")
               .map((u) => (
-                <tr key={u.user_id} className="hover:bg-amber-50/50 transition-colors">
+                <tr
+                  key={u.user_id}
+                  className="hover:bg-amber-50/50 transition-colors"
+                >
                   <td className="px-6 py-4 text-brown-pc/50">#{u.user_id}</td>
                   <td className="px-6 py-4 font-semibold">{u.full_name}</td>
                   <td className="px-6 py-4 text-brown-pc/70">{u.email}</td>
                   <td className="px-6 py-4">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-bold uppercase ${
-                        u.role === "SELLER" ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"
+                        u.role === "SELLER"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-green-100 text-green-800"
                       }`}
                     >
                       {u.role}
@@ -125,7 +148,9 @@ export const AdminUsers = () => {
                   <td className="px-6 py-4">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-bold uppercase ${
-                        u.account_status === "ACTIVE" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                        u.account_status === "ACTIVE"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
                       }`}
                     >
                       {u.account_status}
@@ -154,14 +179,18 @@ export const AdminUsers = () => {
       <UserModal
         selected={selected}
         saving={isSubmitting}
-        onChange={(field, val) => selected && setSelected({ ...selected, [field]: val })}
+        onChange={(field, val) =>
+          selected && setSelected({ ...selected, [field]: val })
+        }
         onSave={handleEditSave}
       />
 
       <CreateUserModal
         newUser={form}
         creating={isSubmitting}
-        onChange={(field, val) => setForm((prev) => ({ ...prev, [field]: val }))}
+        onChange={(field, val) =>
+          setForm((prev) => ({ ...prev, [field]: val }))
+        }
         onClose={() => toggleModal("modal_create_user", false)}
         onCreate={handleCreate}
       />

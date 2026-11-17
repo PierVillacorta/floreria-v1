@@ -3,8 +3,11 @@ import { useProductStore } from "../../store/productStore";
 import { Loading } from "../../components/Loading";
 import { ProductModal } from "../../components/modals/ProductModal";
 import type { Product, ProductForm } from "../../types/types";
+import { useAuthStore } from "../../store/authStore";
+import { Link } from "react-router-dom";
 
 const emptyForm: ProductForm = {
+  product_code: "",
   product_name: "",
   price: 0,
   stock: 0,
@@ -31,6 +34,8 @@ export const AdminProducts = () => {
   const [form, setForm] = useState<ProductForm>(emptyForm);
   const [saving, setSaving] = useState(false);
   const [mode, setMode] = useState<"edit" | "create">("edit");
+  const { user } = useAuthStore();
+  const isAdmin = user?.role === "ADMIN";
 
   useEffect(() => {
     if (products.length === 0) fetchProducts();
@@ -46,6 +51,7 @@ export const AdminProducts = () => {
     setMode("edit");
     setSelected(product);
     setForm({
+      product_code: product.product_code,
       product_name: product.product_name,
       price: product.price,
       stock: product.stock,
@@ -60,26 +66,33 @@ export const AdminProducts = () => {
   const openCreate = () => {
     setMode("create");
     setSelected(null);
-    setForm({ ...emptyForm, category_id:categories[0]?.category_id});
+    setForm({ ...emptyForm, category_id: categories[0]?.category_id });
     toggleModal(true);
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = e.target;
-    const isNumericField = ["price", "stock", "critical_stock", "category_id"].includes(name)
+    const isNumericField = [
+      "price",
+      "stock",
+      "critical_stock",
+      "category_id",
+    ].includes(name);
     setForm((prev) => ({
       ...prev,
-      [name]: isNumericField
-        ? value === "" ? 0 : Number(value): value,
+      [name]: isNumericField ? (value === "" ? 0 : Number(value)) : value,
     }));
   };
 
   const handleSave = async () => {
     if (!form.product_name.trim()) return alert("El nombre es obligatorio");
     setSaving(true);
-    const result = mode === "edit"
+    const result =
+      mode === "edit"
         ? await updateProduct(selected!.product_id, form)
         : await createProduct(form as any);
     setSaving(false);
@@ -87,15 +100,14 @@ export const AdminProducts = () => {
     else alert(result.message);
   };
 
- const handleDelete = async (product: Product) => {
-
-  if (confirm(`¿Eliminar ${product.product_name}?`)) {
-    const result = await deleteProduct(product.product_id);
-    if (!result.success) {
-      alert(result.message);
+  const handleDelete = async (product: Product) => {
+    if (confirm(`¿Eliminar ${product.product_name}?`)) {
+      const result = await deleteProduct(product.product_id);
+      if (!result.success) {
+        alert(result.message);
+      }
     }
-  }
-};
+  };
 
   if (loading) return <Loading />;
   if (error) return <p className="text-red-500 font-semibold p-4">{error}</p>;
@@ -108,16 +120,19 @@ export const AdminProducts = () => {
           <h1 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight">
             Productos
           </h1>
-          <p className="text-sm text-brown-pc/70">Gestión del inventario</p>
+          <p className="text-brown-pc/60">
+            {isAdmin ? "Gestión del inventario" : "Consulta del inventario"}
+          </p>
         </div>
-        <button
-          onClick={openCreate}
-          className="btn bg-amber-950 text-white hover:bg-amber-900 border-none font-semibold cursor-pointer w-full sm:w-auto"
-        >
-          + Nuevo producto
-        </button>
+        {isAdmin && (
+          <button
+            onClick={openCreate}
+            className="btn bg-amber-950 text-white hover:bg-amber-900 border-none font-semibold cursor-pointer w-full sm:w-auto"
+          >
+            + Nuevo producto
+          </button>
+        )}
       </div>
-
       {/* Contenedor de la tabla  productos */}
       <div className="rounded-2xl border border-amber-900/10 bg-white shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
@@ -136,7 +151,10 @@ export const AdminProducts = () => {
                 const isCritical =
                   p.critical_stock !== undefined && p.stock <= p.critical_stock;
                 return (
-                  <tr key={p.product_id} className="hover:bg-amber-50/50 transition-colors">
+                  <tr
+                    key={p.product_id}
+                    className="hover:bg-amber-50/50 transition-colors"
+                  >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <img
@@ -144,7 +162,9 @@ export const AdminProducts = () => {
                           alt={p.product_name}
                           className="h-10 w-10 rounded-lg object-cover shrink-0 bg-gray-100"
                         />
-                        <p className="font-semibold line-clamp-1">{p.product_name}</p>
+                        <p className="font-semibold line-clamp-1">
+                          {p.product_name}
+                        </p>
                       </div>
                     </td>
                     <td className="px-6 py-4 font-semibold whitespace-nowrap">
@@ -162,21 +182,30 @@ export const AdminProducts = () => {
                         {isCritical ? "⚠️ Crítico" : "OK"}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <div className="flex items-center justify-end gap-3">
-                        <button
-                          onClick={() => openEdit(p)}
-                          className="text-amber-800 hover:text-amber-600 font-semibold text-xs uppercase cursor-pointer"
+                    <td className="px-6 py-4 flex gap-3">
+                      {isAdmin ? (
+                        <>
+                          <button
+                            onClick={() => openEdit(p)}
+                            className="text-amber-800 hover:text-amber-600 font-semibold text-xs uppercase cursor-pointer"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => handleDelete(p)}
+                            className="text-red-500 hover:text-red-700 font-semibold text-xs uppercase cursor-pointer"
+                          >
+                            Eliminar
+                          </button>
+                        </>
+                      ) : (
+                        <Link
+                          to={`/product/${p.product_id}`}
+                          className="text-amber-800 hover:text-amber-600 font-semibold text-xs uppercase"
                         >
-                          Editar 
-                        </button>
-                        <button
-                          onClick={() => handleDelete(p)}
-                          className="text-red-500 hover:text-red-700 font-semibold text-xs uppercase cursor-pointer"
-                        >
-                          Eliminar
-                        </button>
-                      </div>
+                          Ver detalle
+                        </Link>
+                      )}
                     </td>
                   </tr>
                 );
@@ -185,15 +214,16 @@ export const AdminProducts = () => {
           </table>
         </div>
       </div>
-
-      <ProductModal
-        mode={mode}
-        form={form}
-        categories={categories}
-        saving={saving}
-        onChange={handleChange}
-        onSave={handleSave}
-      />
+      {isAdmin ?? (
+        <ProductModal
+          mode={mode}
+          form={form}
+          categories={categories}
+          saving={saving}
+          onChange={handleChange}
+          onSave={handleSave}
+        />
+      )}
     </div>
   );
 };

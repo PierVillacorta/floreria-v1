@@ -14,7 +14,6 @@ import { Checkout } from "./pages/payments/Chekout.tsx";
 import { PaymentError } from "./pages/payments/PaymentError.tsx";
 import { PaymentSuccess } from "./pages/payments/PaymentSucess.tsx";
 import { AdminLayout } from "./pages/admin/AdminLayaout.tsx";
-import {Dashboard} from "./components/Dashboard.tsx";
 import { AdminUsers } from "./pages/admin/AdminUsers.tsx";
 import { AdminProducts } from "./pages/admin/AdminProducts.tsx";
 import { Offers } from "./pages/Offers.tsx";
@@ -26,6 +25,18 @@ import { About } from "./pages/About.tsx";
 import { Login } from "./pages/Login.tsx";
 import { Register } from "./pages/Register.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { MyOrders } from "./pages/MyOrders.tsx";
+import { AdminOrders } from "./pages/admin/AdminOrders.tsx";
+import { AdminHome } from "./pages/admin/AdminHome.tsx";
+import { RequireRole } from "./components/RequireRole.tsx";
+import { useAuthStore } from "./store/authStore.ts";
+import { configureApi } from "./utils/api.ts";
+
+
+configureApi({
+  getToken: () => useAuthStore.getState().token,
+  onUnauthorized: () => useAuthStore.getState().logout(),
+});
 
 const router = createBrowserRouter([
   {
@@ -45,14 +56,22 @@ const router = createBrowserRouter([
       { path: "offers", element: <Offers /> },
       { path: "blogs", element: <BlogsPage /> },
       { path: "blogs/:id", element: <BlogDetail /> },
+      { path: "my-orders", element: <MyOrders /> },
       {
         path: "admin",
         element: <AdminLayout />,
         children: [
-          { index: true, element: <Dashboard /> },
-          { path: "users", element: <AdminUsers /> },
+          { index: true, element: <AdminHome /> },
+          { path: "orders", element: <AdminOrders /> },
           { path: "products", element: <AdminProducts /> },
-          { path: "categories", element: <AdminCategories /> },
+          {
+            //Evita que un vendedor entre como admin con la url redirigiendo a /admin
+            element: <RequireRole roles={["ADMIN"]} redirectTo="/admin" />,
+            children: [
+              { path: "users", element: <AdminUsers /> },
+              { path: "categories", element: <AdminCategories /> },
+            ],
+          },
         ],
       },
       { path: "*", element: <NotFoundPage /> },
@@ -63,7 +82,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </GoogleOAuthProvider>
   </StrictMode>,
 );

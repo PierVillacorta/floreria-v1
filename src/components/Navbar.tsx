@@ -6,13 +6,16 @@ const linkClass = "border-b-4 border-transparent hover:border-white-semi duratio
 
 export const Navbar = () => {
   const { user, logout } = useAuthStore();
+  const isStaff = user?.role === "ADMIN" || user?.role === "SELLER";
+
 
   const links = [
     { to: "/categories", label: "Categorías" },
     { to: "/offers", label: "Ofertas" },
     { to: "/about", label: "Sobre Nosotros" },
     { to: "/blogs", label: "Blog" },
-    ...(user?.role === "ADMIN" ? [{ to: "/admin", label: "Admin" }] : []),
+    {to:"/my-orders",label : "Ordenes"},
+    ...(isStaff ? [{to:"/admin", label: user.role === "ADMIN" ? "Admin" : "Panel"}]: [])
   ];
 
   return (
