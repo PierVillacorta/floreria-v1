@@ -14,7 +14,7 @@ export const Navbar = () => {
     { to: "/offers", label: "Ofertas" },
     { to: "/about", label: "Sobre Nosotros" },
     { to: "/blogs", label: "Blog" },
-    {to:"/my-orders",label : "Ordenes"},
+    ...(user ?[{to:"/my-orders",label : "Ordenes"}]:[]),
     ...(isStaff ? [{to:"/admin", label: user.role === "ADMIN" ? "Admin" : "Panel"}]: [])
   ];
 

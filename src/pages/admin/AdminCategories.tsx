@@ -4,10 +4,9 @@ import { Loading } from "../../components/Loading";
 import { CategoryModal } from "../../components/modals/CategoryModal";
 import type { Category } from "../../types/types";
 
-const API_URL = import.meta.env.VITE_API_URL ?? "";
 
 export const AdminCategories = () => {
-  const { categories, loading, fetchCategories, updateCategory, deleteCategory } = useProductStore();
+  const { categories, loading, fetchCategories,createCategory,updateCategory, deleteCategory } = useProductStore();
   const [newName, setNewName] = useState("");
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState<Category | null>(null);
@@ -24,32 +23,16 @@ export const AdminCategories = () => {
       setFeedback({ success: false, message: "El nombre es obligatorio" });
       return;
     }
+
     setSaving(true);
     setFeedback(null);
-    try {
-      const res = await fetch(`${API_URL}/auth/categories`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ category_name: newName.trim() }),
-      });
-      const data = await res.json();
+    const result = await createCategory(newName.trim());
+    setSaving(false);
 
-      if (data.status === "ALREADY_EXISTS") {
-        setFeedback({ success: false, message: "Esa categoría ya existe" });
-        return;
-      }
-      if (data.status !== "OK") {
-        setFeedback({ success: false, message: "No se pudo crear" });
-        return;
-      }
+    if (result.success) {
       setNewName("");
-      setFeedback({ success: true, message: "Categoría creada" });
-      fetchCategories();
-    } catch {
-      setFeedback({ success: false, message: "Error de conexión" });
-    } finally {
-      setSaving(false);
     }
+    setFeedback(result);
   };
 
   const handleDelete = async (id: number) => {
@@ -72,7 +55,7 @@ export const AdminCategories = () => {
     const result = await updateCategory(editing.category_id, editName.trim());
     setSaving(false);
     if (result.success) {
-      (document.getElementById("modal_edit_cat") as HTMLDialogElement)?.close();
+      (document.getElementById("modal_edit_cat") as HTMLDialogElement )?.close();
     } else {
       alert(result.message);
     }

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import { useAuthStore } from "../../store/authStore";
 import { useOrderStore } from "../../store/orderStore";
+import { useProductStore } from "../../store/productStore";
 
 type CheckoutForm = {
   full_name: string;
@@ -16,6 +17,7 @@ type CheckoutForm = {
 export const Checkout = () => {
   const { cart, getTotal, clearCart } = useCartStore();
   const { user } = useAuthStore();
+  const { fetchProducts } = useProductStore();
   const { createOrder } = useOrderStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -69,7 +71,7 @@ export const Checkout = () => {
     setSubmitting(true);
     setSubmitError(null);
 
-    // Solo enviamos ids y cantidades: el servidor calcula precios y total
+    // Solo enviamos id y cantidades: el servidor calcula precios y total
     const result = await createOrder({
       customer_name: form.full_name.trim(),
       customer_email: form.email.trim(),
@@ -82,23 +84,23 @@ export const Checkout = () => {
 
     setSubmitting(false);
 
-    // Error real (sin stock, sesión vencida, datos inválidos...): se muestra aquí
     if (!result.success) {
       setSubmitError(result.message);
       return;
     }
 
-    // Un pago fallido NO es un error HTTP: la orden existe con status FAILED
     if (result.data.status === "PAID") {
       clearCart();
+      fetchProducts();
       navigate("/payment-success", { state: { order: result.data } });
     } else {
       // El carrito se conserva para poder reintentar
       navigate("/payment-error", { state: { order: result.data } });
     }
   };
+  if (!user) return <Navigate to="/login" replace />;
 
-  // si esta vacio , redirigir a la tienda
+  // si esta vacio 
   if (cart.length === 0) {
     return (
       <section className="min-h-screen flex flex-col items-center justify-center bg-white-semi text-brown-pc">

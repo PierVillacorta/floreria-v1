@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import type { CartProduct, Product } from "../types/types";
 import { persist } from "zustand/middleware";
+import type { CartProduct, Product } from "../types/types";
 import type { AuhtResponse } from "./authStore";
 
 type CartState = {
@@ -9,7 +9,7 @@ type CartState = {
   deleteProduct: (id: Product["product_id"]) => void;
   increaseQuantity: (id: Product["product_id"]) => void;
   decreaseQuantity: (id: Product["product_id"]) => void;
-  clearCart: () => AuhtResponse;
+  clearCart: () => void;
   getTotal: () => number;
 };
 
@@ -17,52 +17,62 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       cart: [],
-      addProduct: (product) =>{
-      const productExist = get().cart.find(p => p.product_id === product.product_id)
-      if(productExist){
+
+      addProduct: (product) => {
+        if (product.stock <= 0) {
+          return { success: false, message: "Producto sin stock disponible" };
+        }
+
+        const productExist = get().cart.find((p) => p.product_id === product.product_id);
+        if (productExist) {
+          if (productExist.amount >= product.stock) {
+            return { success: false, message: "Alcanzaste el stock máximo disponible" };
+          }
+          set((state) => ({
+            cart: state.cart.map((p) =>
+              p.product_id === product.product_id
+                ? { ...p, stock: product.stock, amount: p.amount + 1 }
+                : p,
+            ),
+          }));
+          return { success: true, message: "Cantidad agregada al carrito" };
+        }
+
         set((state) => ({
-          cart:state.cart.map(p => p.product_id === product.product_id ? {...p,amount:p.amount + 1}: p)
-        }))
-        const responseAdd = {success:true,message:"Cantidad agregada al carrito"}
-        alert(responseAdd.message)
-        return responseAdd
-      }
-      set((state) => ({
-        cart:[...state.cart,{...product,amount:1}]
-      }))
-      const responseAdd = {success:true,message:"Producto agregado al carrito"}
-      alert(responseAdd.message)
-      return responseAdd
+          cart: [...state.cart, { ...product, amount: 1 }],
+        }));
+        return { success: true, message: "Producto agregado al carrito" };
       },
-      deleteProduct: (id) =>{
+
+      deleteProduct: (id) => {
         set((state) => ({
-          cart:state.cart.filter(p => p.product_id !== id)
-        }))
-  
-        return {success:true,message:"Producto eliminado correctamente"}
+          cart: state.cart.filter((p) => p.product_id !== id),
+        }));
       },
+
       increaseQuantity: (id) => {
         set((state) => ({
-          cart : state.cart.map( p => p.product_id === id ? {...p,amount:p.amount + 1} : p)
-        }))
+          cart: state.cart.map((p) =>
+            p.product_id === id && p.amount < p.stock
+              ? { ...p, amount: p.amount + 1 }
+              : p,
+          ),
+        }));
       },
+
       decreaseQuantity: (id) => {
-        const producto = get().cart.find(p => p.product_id === id)
-        if(producto && producto.amount > 1){
+        const producto = get().cart.find((p) => p.product_id === id);
+        if (producto && producto.amount > 1) {
           set((state) => ({
-          cart: state.cart.map(p => p.product_id === id && p.amount > 1 ? {...p,amount:p.amount - 1} : p)
-          }))
+            cart: state.cart.map((p) =>
+              p.product_id === id && p.amount > 1 ? { ...p, amount: p.amount - 1 } : p,
+            ),
+          }));
         }
       },
-      clearCart: () => {
-        set({cart : []})
-        const responseClear = {success:true,message:"Carrito vaciado"}
-        alert(responseClear.message)
-        return responseClear
-      },
-      getTotal: () => get().cart.reduce((acc,p) => acc + p.price * p.amount,0),
+      clearCart: () => set({ cart: [] }),
+      getTotal: () => get().cart.reduce((acc, p) => acc + p.price * p.amount, 0),
     }),
-
     { name: "floreria-cart" },
   ),
 );

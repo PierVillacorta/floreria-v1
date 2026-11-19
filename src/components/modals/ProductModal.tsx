@@ -1,4 +1,4 @@
-import {  useRef } from "react";
+import { useRef } from "react";
 import type { ProductForm, Category } from "../../types/types";
 
 type ProductModalProps = {
@@ -7,7 +7,7 @@ type ProductModalProps = {
   categories: Category[];
   saving: boolean;
   onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => void;
   onSave: () => void;
 };
@@ -21,6 +21,7 @@ export const ProductModal = ({
   onSave,
 }: ProductModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
+
   return (
     <dialog
       ref={dialogRef}
@@ -41,26 +42,47 @@ export const ProductModal = ({
           }}
           className="space-y-4"
         >
-          {/* Nombre */}
-          <div>
-            <label htmlFor="product_name" className="block text-xs font-bold uppercase mb-1">Nombre *</label>
-            <input
-              type="text"
-              name="product_name"
-              value={form.product_name}
-              onChange={onChange}
-              placeholder="Nombre del producto"
-              required
-              className="w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-2.5 text-brown-pc outline-none focus:border-brown-pc/60"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label htmlFor="product_code" className="block text-xs font-bold uppercase mb-1">
+                Código *
+              </label>
+              <input
+                id="product_code"
+                type="text"
+                name="product_code"
+                value={form.product_code}
+                onChange={onChange}
+                placeholder="Ej: FL-001"
+                required
+                className="w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-2.5 text-brown-pc outline-none focus:border-brown-pc/60"
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label htmlFor="product_name" className="block text-xs font-bold uppercase mb-1">
+                Nombre *
+              </label>
+              <input
+                id="product_name"
+                type="text"
+                name="product_name"
+                value={form.product_name}
+                onChange={onChange}
+                placeholder="Nombre del producto"
+                required
+                className="w-full rounded-lg border border-brown-pc/20 bg-white-semi px-4 py-2.5 text-brown-pc outline-none focus:border-brown-pc/60"
+              />
+            </div>
           </div>
 
-          {/* Precio y Stock */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="price" className="block text-xs font-bold uppercase mb-1">Precio *</label>
+              <label htmlFor="price" className="block text-xs font-bold uppercase mb-1">
+                Precio *
+              </label>
               <input
-              id="price"
+                id="price"
                 type="number"
                 name="price"
                 min="0"
@@ -74,9 +96,11 @@ export const ProductModal = ({
             </div>
 
             <div>
-              <label htmlFor="stock" className="block text-xs font-bold uppercase mb-1">Stock *</label>
+              <label htmlFor="stock" className="block text-xs font-bold uppercase mb-1">
+                Stock *
+              </label>
               <input
-              id="stock"
+                id="stock"
                 type="number"
                 name="stock"
                 min="0"
@@ -90,11 +114,13 @@ export const ProductModal = ({
             </div>
           </div>
 
-          {/* Stock Crítico y Categoría */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="critical_stock" className="block text-xs font-bold uppercase mb-1">Stock crítico</label>
+              <label htmlFor="critical_stock" className="block text-xs font-bold uppercase mb-1">
+                Stock crítico
+              </label>
               <input
+                id="critical_stock"
                 type="number"
                 name="critical_stock"
                 min="0"
@@ -107,8 +133,11 @@ export const ProductModal = ({
             </div>
 
             <div>
-              <label htmlFor="category_id" className="block text-xs font-bold uppercase mb-1">Categoría *</label>
+              <label htmlFor="category_id" className="block text-xs font-bold uppercase mb-1">
+                Categoría *
+              </label>
               <select
+                id="category_id"
                 name="category_id"
                 value={form.category_id}
                 onChange={onChange}
@@ -124,10 +153,12 @@ export const ProductModal = ({
             </div>
           </div>
 
-          {/* URL Imagen */}
           <div>
-            <label htmlFor="image_url" className="block text-xs font-bold uppercase mb-1">URL de imagen</label>
+            <label htmlFor="image_url" className="block text-xs font-bold uppercase mb-1">
+              URL de imagen
+            </label>
             <input
+              id="image_url"
               type="text"
               name="image_url"
               value={form.image_url}
@@ -137,10 +168,12 @@ export const ProductModal = ({
             />
           </div>
 
-          {/* Descripción */}
           <div>
-            <label htmlFor="description" className="block text-xs font-bold uppercase mb-1">Descripción</label>
+            <label htmlFor="description" className="block text-xs font-bold uppercase mb-1">
+              Descripción
+            </label>
             <textarea
+              id="description"
               name="description"
               value={form.description}
               onChange={onChange}
@@ -150,7 +183,6 @@ export const ProductModal = ({
             />
           </div>
 
-          {/* Botones de Acción */}
           <div className="modal-action flex justify-end gap-3 pt-4">
             <button
               type="button"
